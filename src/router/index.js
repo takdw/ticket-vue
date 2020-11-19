@@ -6,32 +6,42 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: "/",
-    name: "Home",
-    component: () => import(/* webpackChunkName: "home" */ "../views/Home.vue"),
-  },
-  {
-    path: "/ticket/:id",
-    name: "Ticket",
     component: () =>
-      import(/* webpackChunkName: "ticket" */ "../views/Ticket.vue"),
-  },
-  {
-    path: "/ticket/:id/buy",
-    name: "Buy Ticket",
-    component: () =>
-      import(/* webpackChunkName: "buy-ticket" */ "../views/BuyTicket.vue"),
-  },
-  {
-    path: "/profile",
-    name: "Profile",
-    component: () =>
-      import(/* webpackChunkName: "profile" */ "../views/Profile.vue"),
-  },
-  {
-    path: "/profile/edit",
-    name: "Edit Profile",
-    component: () =>
-      import(/* webpackChunkName: "edit-profile" */ "../views/EditProfile.vue"),
+      import(/* webpackChunkName: "main" */ "../views/Wrappers/Main.vue"),
+    children: [
+      {
+        path: "/",
+        name: "Home",
+        component: () =>
+          import(/* webpackChunkName: "home" */ "../views/Home.vue"),
+      },
+      {
+        path: "ticket/:id",
+        name: "Ticket",
+        component: () =>
+          import(/* webpackChunkName: "ticket" */ "../views/Ticket.vue"),
+      },
+      {
+        path: "ticket/:id/buy",
+        name: "Buy Ticket",
+        component: () =>
+          import(/* webpackChunkName: "buy-ticket" */ "../views/BuyTicket.vue"),
+      },
+      {
+        path: "profile",
+        name: "Profile",
+        component: () =>
+          import(/* webpackChunkName: "profile" */ "../views/Profile.vue"),
+      },
+      {
+        path: "profile/edit",
+        name: "Edit Profile",
+        component: () =>
+          import(
+            /* webpackChunkName: "edit-profile" */ "../views/EditProfile.vue"
+          ),
+      },
+    ],
   },
   {
     path: "/login",
