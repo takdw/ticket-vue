@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full grid grid-cols-3 overflow-hidden">
+  <div class="h-screen grid grid-cols-3 overflow-hidden">
     <div
       class="relative col-span-1 bg-indigo-500 text-white bg-cover bg-center"
       style="
