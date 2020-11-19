@@ -24,7 +24,7 @@
         </div>
       </div>
     </div>
-    <div class="col-span-2 grid place-items-center overflow-y-auto">
+    <div class="row-start-1 col-span-2 grid place-items-center overflow-y-auto">
       <div class="w-full max-w-md mx-auto py-12">
         <h2 class="text-3xl text-center font-bold">Sign In</h2>
         <form class="space-y-3 mt-8">
