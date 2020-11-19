@@ -78,19 +78,20 @@
                         >at <span class="text-indigo-500">7:30PM</span></span
                       >
                     </p>
-                    <div
+                    <router-link
+                      to="/ticket/1/buy"
                       class="mt-8 flex items-stretch justify-between rounded-lg bg-indigo-500 text-white cursor-pointer transition ease-in-out duration-300 hover:bg-indigo-400"
                     >
                       <p class="text-xl font-semibold p-4">Buy Tickets</p>
-                      <div
+                      <p
                         class="my-2 mr-2 px-4 font-semibold rounded-md bg-white text-indigo-500 flex items-center"
                       >
-                        <p>
+                        <span>
                           <span class="text-sm">ETB</span>
                           <span class="ml-1 text-xl">200</span>
-                        </p>
-                      </div>
-                    </div>
+                        </span>
+                      </p>
+                    </router-link>
                     <p
                       class="mt-4 text-center text-sm font-medium text-gray-600"
                     >
