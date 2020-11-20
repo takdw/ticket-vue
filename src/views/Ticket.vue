@@ -45,7 +45,7 @@
                     >
                   </p>
                   <router-link
-                    to="/ticket/1/buy"
+                    :to="`/ticket/${ticket.id}/buy`"
                     class="mt-8 flex items-stretch justify-between rounded-lg bg-indigo-500 text-white cursor-pointer transition ease-in-out duration-300 hover:bg-indigo-400"
                   >
                     <p class="text-xl font-semibold p-4">Buy Tickets</p>
