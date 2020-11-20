@@ -183,41 +183,16 @@
 </template>
 
 <script>
-import { DateTime } from "luxon";
+import Ticket from "@/mixins/ticket";
 
 export default {
-  data: () => ({
-    ticket: {},
-    dateObj: {},
-  }),
-  watch: {
-    ticket(newValue) {
-      this.dateObj = DateTime.fromISO(newValue.date);
-    },
-  },
+  mixins: [Ticket],
   computed: {
     id() {
       return this.$route.params.id;
     },
-    vendor() {
-      return this.ticket.vendor || {};
-    },
-    time() {
-      return this.dateObj.toLocaleString(DateTime.TIME_SIMPLE);
-    },
-    date() {
-      return this.dateObj.toLocaleString(DateTime.DATE_FULL);
-    },
-    dayName() {
-      return this.dateObj.toFormat("cccc");
-    },
-    price() {
-      return (this.ticket.price / 100).toFixed(2);
-    },
   },
   created() {
-    this.dateObj = DateTime.local();
-
     this.$http
       .get(`tickets/${this.id}`)
       .then(response => (this.ticket = response.data))

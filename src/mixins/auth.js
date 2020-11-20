@@ -6,6 +6,9 @@ const Auth = {
     user() {
       return this.$store.state.user;
     },
+    wallet() {
+      return this.user.wallet_balance || 0;
+    },
   },
 };
 

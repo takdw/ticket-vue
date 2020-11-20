@@ -12,13 +12,8 @@
         />
       </div>
       <div class="px-8 py-4">
-        <h2 class="text-2xl font-semibold leading-tight">
-          Lorem ipsum dolor sit amet consectetur
-        </h2>
-        <p class="mt-2 text-gray-700">
-          Sit amet consectetur, adipisicing elit. Laborum blanditiis, tenetur ab
-          dolores nobis!
-        </p>
+        <h2 class="text-2xl font-semibold leading-tight">{{ ticket.title }}</h2>
+        <p class="mt-2 text-gray-700">{{ ticket.subtitle }}</p>
 
         <div class="mt-4 flex items-center space-x-2">
           <svg
@@ -33,7 +28,7 @@
               clip-rule="evenodd"
             ></path>
           </svg>
-          <p>Ghion Hotel</p>
+          <p>{{ ticket.venue }}</p>
         </div>
         <div class="flex mt-1 items-center space-x-2">
           <svg
@@ -48,7 +43,7 @@
               clip-rule="evenodd"
             ></path>
           </svg>
-          <span>September 14, 2020 at 7:30 PM</span>
+          <span>{{ date }} at {{ time }}</span>
         </div>
       </div>
       <div class="bg-gray-200 px-8 py-4 shadow">
@@ -60,6 +55,7 @@
               >Ticket Quantity</label
             >
             <input
+              v-model="quantity"
               type="number"
               class="form-input w-48 mt-1"
               min="1"
@@ -70,19 +66,17 @@
             <p class="text-sm font-semibold text-gray-600">Total</p>
             <p class="ml-2 font-semibold">
               <span class="text-sm">ETB</span>
-              <span class="ml-1 text-4xl">200</span>
+              <span class="ml-1 text-4xl">{{ total }}</span>
             </p>
           </div>
         </div>
         <div class="mt-6 text-center">
-          <button
-            class="w-64 py-2 text-white font-semibold bg-indigo-500 hover:bg-indigo-400 rounded-lg transition ease-in-out duration-300"
+          <Button @click="pay" variant="primary" class="w-64" :loading="paying"
+            >Pay</Button
           >
-            Pay
-          </button>
           <p class="mt-4 px-16 text-sm text-gray-700 leading-tight">
             You'll have
-            <strong><span class="text-xs">ETB</span> 345.43</strong>
+            <strong><span class="text-xs">ETB</span> {{ remaining }}</strong>
             remaining in your wallet after this purchase.
           </p>
         </div>
@@ -92,10 +86,54 @@
 </template>
 
 <script>
+import Auth from "@/mixins/auth";
+import Ticket from "@/mixins/ticket";
+
+import Button from "@/components/Button";
+
 export default {
+  mixins: [Auth, Ticket],
+  components: {
+    Button,
+  },
+  data: () => ({
+    quantity: 1,
+    paying: false,
+  }),
   computed: {
-    year() {
-      return new Date().getFullYear();
+    id() {
+      return this.$route.params.id;
+    },
+    totalInCents() {
+      return this.quantity * this.ticket.price;
+    },
+    total() {
+      return (this.totalInCents / 100).toFixed(2);
+    },
+    remaining() {
+      return ((this.wallet - this.totalInCents) / 100).toFixed(2);
+    },
+  },
+  created() {
+    this.$http
+      .get(`tickets/${this.id}`)
+      .then(response => (this.ticket = response.data))
+      .catch(err => console.log(err));
+  },
+  methods: {
+    pay() {
+      this.paying = true;
+
+      this.$http
+        .post(`tickets/${this.id}/buy`, {
+          quantity: this.quantity,
+        })
+        .then(response => {
+          console.log(response.data);
+          this.$router.push("/profile");
+        })
+        .catch(err => console.log(err))
+        .finally(() => (this.paying = false));
     },
   },
 };
