@@ -61,7 +61,7 @@
               Login
             </router-link>
             <router-link
-              to="signup"
+              to="/signup"
               class="px-10 py-3 font-semibold rounded-lg text-sm text-indigo-700 bg-indigo-200 hover:bg-indigo-300 transition duration-300 ease-in-out"
             >
               Sign Up

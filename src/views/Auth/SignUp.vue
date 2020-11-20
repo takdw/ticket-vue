@@ -27,7 +27,7 @@
     <div class="col-span-2 grid place-items-center overflow-y-auto">
       <div class="w-full max-w-md mx-auto py-12">
         <h2 class="text-3xl text-center font-bold">Create Account</h2>
-        <form class="space-y-3 mt-8">
+        <form @submit.prevent="signup" class="space-y-3 mt-8">
           <div>
             <label
               class="block font-semibold text-sm uppercase text-gray-600"
@@ -35,10 +35,15 @@
               >Name</label
             >
             <input
+              v-model="form.name"
               class="form-input w-full mt-1"
+              :class="{ 'border-red-500': errors.name }"
               id="name"
               placeholder="Abebe Balcha"
             />
+            <p class="text-red-500 text-sm font-medium" v-if="errors.name">
+              {{ errors.name[0] }}
+            </p>
           </div>
           <div>
             <label
@@ -47,11 +52,17 @@
               >Email</label
             >
             <input
+              v-model="form.email"
               type="email"
               id="email"
               class="form-input w-full mt-1"
+              :class="{ 'border-red-500': errors.email }"
               placeholder="abebe.balcha@gmail.com"
+              @keyup="clearErrors('email')"
             />
+            <p class="text-red-500 text-sm font-medium" v-if="errors.email">
+              {{ errors.email[0] }}
+            </p>
           </div>
           <div>
             <label
@@ -60,20 +71,38 @@
               >Phone Number</label
             >
             <input
+              v-model="form.phone_number"
               class="form-input w-full mt-1"
+              :class="{ 'border-red-500': errors.phone_number }"
               id="phone_number"
               placeholder="0911223344"
             />
+            <p
+              class="text-red-500 text-sm font-medium"
+              v-if="errors.phone_number"
+            >
+              {{ errors.phone_number[0] }}
+            </p>
           </div>
           <div>
             <label
               class="block font-semibold text-sm uppercase text-gray-600"
+              :class="{ 'border-red-500': errors.country }"
               for="country"
               >Country</label
             >
-            <select class="form-select w-full mt-1" id="country">
+            <select
+              @change="selectCountry"
+              class="form-select w-full mt-1"
+              id="country"
+            >
               <option>Choose a country...</option>
+              <option value="Ethiopia">Ethiopia</option>
             </select>
+
+            <p class="text-red-500 text-sm font-medium" v-if="errors.country">
+              {{ errors.country[0] }}
+            </p>
           </div>
           <div>
             <label
@@ -82,11 +111,17 @@
               >Password</label
             >
             <input
+              v-model="form.password"
               class="form-input w-full mt-1"
+              :class="{ 'border-red-500': errors.password }"
               id="password"
               type="password"
               placeholder="Password"
+              @keyup="clearErrors('password')"
             />
+            <p class="text-red-500 text-sm font-medium" v-if="errors.password">
+              {{ errors.password[0] }}
+            </p>
           </div>
           <div>
             <label
@@ -96,6 +131,7 @@
               Confirm Password
             </label>
             <input
+              v-model="form.password_confirmation"
               class="form-input w-full mt-1"
               id="password_confirmation"
               type="password"
@@ -103,11 +139,9 @@
             />
           </div>
           <div class="text-center">
-            <button
-              class="mt-4 px-12 py-2 rounded-lg text-white font-bold bg-indigo-500 hover:bg-indigo-400 transition duration-300 ease-in-out"
-            >
+            <Button variant="primary" class="mt-4 w-64" :loading="working">
               Sign Up
-            </button>
+            </Button>
             <p class="mt-4 text-sm text-gray-600">
               By clicking on sign up, you are agreeing to our
               <strong class="cursor-pointer hover:underline"
@@ -124,3 +158,48 @@
     </div>
   </div>
 </template>
+
+<script>
+import Button from "@/components/Button";
+
+export default {
+  components: {
+    Button,
+  },
+  data: () => ({
+    working: false,
+    form: {
+      name: "",
+      email: "",
+      phone_number: "",
+      country: "",
+      password: "",
+      password_confirmation: "",
+    },
+    errors: {},
+  }),
+  methods: {
+    clearErrors(field) {
+      if (this.errors[field]) {
+        delete this.errors[field];
+      }
+    },
+    selectCountry(e) {
+      this.form.country = e.target.value;
+    },
+    signup() {
+      this.working = true;
+
+      this.$http
+        .post("/users", {
+          ...this.form,
+        })
+        .then(() => this.$router.push("/login"))
+        .catch(err => {
+          this.errors = err.response.data.errors;
+        })
+        .finally(() => (this.working = false));
+    },
+  },
+};
+</script>
