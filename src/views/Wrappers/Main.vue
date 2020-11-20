@@ -86,7 +86,10 @@
 </template>
 
 <script>
+import Auth from "@/mixins/auth";
+
 export default {
+  mixins: [Auth],
   data: () => ({
     profileDropdownOpen: false,
   }),
@@ -105,12 +108,6 @@ export default {
   computed: {
     year() {
       return new Date().getFullYear();
-    },
-    isLoggedIn() {
-      return this.$store.getters.isLoggedIn;
-    },
-    user() {
-      return this.$store.state.user;
     },
   },
   methods: {
