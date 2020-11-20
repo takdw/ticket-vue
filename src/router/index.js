@@ -26,12 +26,18 @@ const routes = [
         name: "Buy Ticket",
         component: () =>
           import(/* webpackChunkName: "buy-ticket" */ "../views/BuyTicket.vue"),
+        meta: {
+          requiresAuth: true,
+        },
       },
       {
         path: "profile",
         name: "Profile",
         component: () =>
           import(/* webpackChunkName: "profile" */ "../views/Profile.vue"),
+        meta: {
+          requiresAuth: true,
+        },
       },
       {
         path: "profile/edit",

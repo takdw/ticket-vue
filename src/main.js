@@ -22,6 +22,13 @@ Vue.prototype.$http.interceptors.request.use(req => {
   return req;
 });
 
+router.beforeEach((to, from, next) => {
+  if (to.meta.requiresAuth && !store.getters.isLoggedIn) {
+    next("/login");
+  }
+  next();
+});
+
 store
   .dispatch("check")
   .catch(err => {})
