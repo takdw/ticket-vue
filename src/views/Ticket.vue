@@ -10,12 +10,9 @@
             <div class="col-span-1 h-full flex items-center">
               <div class="px-12">
                 <h2 class="text-5xl font-semibold text-white leading-tight">
-                  Lorem ipsum dolor sit amet consectetur
+                  {{ ticket.title }}
                 </h2>
-                <p class="mt-8 text-xl text-white">
-                  Sit amet consectetur, adipisicing elit. Laborum blanditiis,
-                  tenetur ab dolores nobis!
-                </p>
+                <p class="mt-8 text-xl text-white">{{ ticket.subtitle }}</p>
                 <div class="mt-8 flex items-center text-white">
                   <div>
                     <svg
@@ -31,7 +28,7 @@
                       ></path>
                     </svg>
                   </div>
-                  <p class="ml-2">Ghion Hotel</p>
+                  <p class="ml-2">{{ ticket.venue }}</p>
                 </div>
               </div>
             </div>
@@ -39,13 +36,12 @@
               <div class="pr-24 pl-32 w-full">
                 <div class="bg-white rounded-lg p-6">
                   <p>
-                    <span class="text-xl font-semibold"
-                      >Saturday September
-                      <span class="text-indigo-500">14</span>, 2020</span
-                    >
+                    <span class="text-xl font-semibold">
+                      {{ dayName }} {{ date }}
+                    </span>
                     <br />
                     <span class="font-semibold text-gray-600"
-                      >at <span class="text-indigo-500">7:30PM</span></span
+                      >at <span class="text-indigo-500">{{ time }}</span></span
                     >
                   </p>
                   <router-link
@@ -58,12 +54,12 @@
                     >
                       <span>
                         <span class="text-sm">ETB</span>
-                        <span class="ml-1 text-xl">200</span>
+                        <span class="ml-1 text-xl">{{ price }}</span>
                       </span>
                     </p>
                   </router-link>
                   <p class="mt-4 text-center text-sm font-medium text-gray-600">
-                    No under 18 admittance
+                    {{ ticket.additional_info }}
                   </p>
                 </div>
               </div>
@@ -83,23 +79,7 @@
         <div class="col-span-3">
           <div>
             <h2 class="text-2xl font-bold text-gray-700">Description</h2>
-            <p class="mt-4">
-              Lorem ipsum dolor sit amet, consectetur adipisicing, elit. Natus
-              possimus maxime magni unde quas voluptates est corrupti
-              reprehenderit quasi necessitatibus, harum quibusdam rem autem
-              dolorem, nemo? Incidunt reiciendis natus magnam. Optio velit
-              tenetur incidunt aut corporis nihil illum, dignissimos nostrum
-              tempore repellat, harum iusto distinctio quia minima animi
-              voluptatibus ratione officia id. Itaque sit corporis maxime, minus
-              obcaecati iusto, deserunt.
-            </p>
-            <p class="mt-4">
-              Cupiditate, quidem labore quia quod alias qui repellendus commodi
-              libero delectus animi sunt sequi fugiat nisi nesciunt dolore
-              molestias, ullam modi tenetur tempora neque pariatur earum
-              inventore. Molestiae, modi, laboriosam! Suscipit quod sequi
-              voluptatum, voluptatibus?
-            </p>
+            <p class="mt-4">{{ ticket.subtitle }}</p>
           </div>
           <div class="mt-12">
             <h2 class="text-2xl font-bold text-gray-700">Date and Time</h2>
@@ -116,7 +96,7 @@
                   clip-rule="evenodd"
                 ></path>
               </svg>
-              <span>September 14, 2020</span>
+              <span>{{ date }}</span>
             </p>
             <p class="mt-2 flex items-center space-x-2">
               <svg
@@ -131,7 +111,7 @@
                   clip-rule="evenodd"
                 ></path>
               </svg>
-              <span>7:30 PM</span>
+              <span>{{ time }}</span>
             </p>
           </div>
           <div class="mt-12">
@@ -149,7 +129,7 @@
                   clip-rule="evenodd"
                 ></path>
               </svg>
-              <span>event.organizer@domain.com</span>
+              <span>{{ vendor.email }}</span>
             </p>
             <p class="mt-2 flex items-center space-x-2">
               <svg
@@ -162,7 +142,7 @@
                   d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"
                 ></path>
               </svg>
-              <span>7:30 PM</span>
+              <span>{{ vendor.phone_number }}</span>
             </p>
           </div>
         </div>
@@ -190,8 +170,9 @@
                 ></path>
               </svg>
               <p>
-                <span>Ghion Hotel</span>,
-                <span class="text-gray-700 text-sm">Addis Ababa</span>
+                <span>{{ ticket.venue }}</span
+                >,
+                <span class="text-gray-700 text-sm">{{ ticket.city }}</span>
               </p>
             </div>
           </div>
@@ -202,11 +183,45 @@
 </template>
 
 <script>
+import { DateTime } from "luxon";
+
 export default {
-  computed: {
-    year() {
-      return new Date().getFullYear();
+  data: () => ({
+    ticket: {},
+    dateObj: {},
+  }),
+  watch: {
+    ticket(newValue) {
+      this.dateObj = DateTime.fromISO(newValue.date);
     },
+  },
+  computed: {
+    id() {
+      return this.$route.params.id;
+    },
+    vendor() {
+      return this.ticket.vendor || {};
+    },
+    time() {
+      return this.dateObj.toLocaleString(DateTime.TIME_SIMPLE);
+    },
+    date() {
+      return this.dateObj.toLocaleString(DateTime.DATE_FULL);
+    },
+    dayName() {
+      return this.dateObj.toFormat("cccc");
+    },
+    price() {
+      return (this.ticket.price / 100).toFixed(2);
+    },
+  },
+  created() {
+    this.dateObj = DateTime.local();
+
+    this.$http
+      .get(`tickets/${this.id}`)
+      .then(response => (this.ticket = response.data))
+      .catch(err => console.log(err));
   },
 };
 </script>
