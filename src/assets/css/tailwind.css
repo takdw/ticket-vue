@@ -2,4 +2,17 @@
 
 @tailwind components;
 
+@keyframes spinAround {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(359deg);
+    }
+}
+
+.spin {
+    animation: spinAround 1s infinite linear;
+}
+
 @tailwind utilities;

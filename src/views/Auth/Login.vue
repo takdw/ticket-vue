@@ -27,18 +27,27 @@
     <div class="row-start-1 col-span-2 grid place-items-center overflow-y-auto">
       <div class="w-full max-w-md mx-auto py-12">
         <h2 class="text-3xl text-center font-bold">Sign In</h2>
-        <form class="space-y-3 mt-8">
+        <div v-if="error" class="mt-4">
+          <p
+            class="text-red-800 bg-red-200 border border-red-800 text-center p-4 rounded-lg"
+          >
+            Incorrect email/password combination.
+          </p>
+        </div>
+        <form @submit.prevent="login" class="space-y-3 mt-4">
           <div>
             <label
               class="block font-semibold text-sm uppercase text-gray-600"
               for="email"
-              >Email</label
+              >Email/TIN</label
             >
             <input
-              type="email"
+              v-model="email"
+              type="text"
               id="email"
               class="form-input w-full mt-1"
-              placeholder="abebe.balcha@gmail.com"
+              placeholder="Email or Vendor TIN"
+              required
             />
           </div>
           <div>
@@ -48,21 +57,59 @@
               >Password</label
             >
             <input
+              v-model="password"
               class="form-input w-full mt-1"
               id="password"
               type="password"
               placeholder="Password"
+              required
             />
           </div>
           <div class="text-center">
-            <button
-              class="mt-4 px-12 py-2 rounded-lg text-white font-bold bg-indigo-500 hover:bg-indigo-400 transition duration-300 ease-in-out"
-            >
-              Sign In
-            </button>
+            <Button :loading="loading" variant="primary">Sign In</Button>
           </div>
         </form>
       </div>
     </div>
   </div>
 </template>
+
+<script>
+import Button from "@/components/Button";
+export default {
+  components: {
+    Button,
+  },
+  data: () => ({
+    loading: false,
+    email: "",
+    password: "",
+    error: false,
+  }),
+  methods: {
+    login() {
+      this.error = false;
+      this.loading = true;
+
+      this.$store
+        .dispatch("login", {
+          email: this.email,
+          password: this.password,
+        })
+        .then(response => {
+          setTimeout(() => this.$router.push("/"), 150);
+        })
+        .catch(err => {
+          if (err.response.data.email || err.response.data.tin) {
+            this.error = true;
+          } else {
+            // show an error message or something
+          }
+        })
+        .finally(() => {
+          this.loading = false;
+        });
+    },
+  },
+};
+</script>

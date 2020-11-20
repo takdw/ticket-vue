@@ -11,7 +11,7 @@
               digiTickets
             </router-link>
           </div>
-          <div class="flex items-center space-x-8">
+          <div v-if="isLoggedIn" class="flex items-center space-x-8">
             <div class="relative" ref="dropdownWrapper">
               <div
                 @click="toggleProfileDropdown"
@@ -22,7 +22,7 @@
                   src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=300&h=300&q=80"
                   alt="Profile Picture"
                 />
-                <span class="ml-4">Lydia Asmare</span>
+                <span class="ml-4">{{ user.name }}</span>
               </div>
               <div
                 v-if="profileDropdownOpen"
@@ -40,6 +40,7 @@
                     <li class="border-t my-2"></li>
                     <li>
                       <button
+                        @click="logout"
                         type="button"
                         to="/profile"
                         class="block w-full px-4 py-2 font-semibold text-sm text-gray-700 hover:text-black hover:bg-gray-200 transition duration-300 ease-in-out rounded-lg text-left"
@@ -51,6 +52,8 @@
                 </div>
               </div>
             </div>
+          </div>
+          <div v-else class="flex items-center space-x-8">
             <router-link
               to="/login"
               class="px-10 py-3 font-semibold rounded-lg text-sm text-gray-700 hover:text-black hover:bg-white transition duration-300 ease-in-out"
@@ -103,6 +106,12 @@ export default {
     year() {
       return new Date().getFullYear();
     },
+    isLoggedIn() {
+      return this.$store.getters.isLoggedIn;
+    },
+    user() {
+      return this.$store.state.user;
+    },
   },
   methods: {
     toggleProfileDropdown() {
@@ -112,6 +121,12 @@ export default {
       if (!this.$refs.dropdownWrapper.contains(e.target)) {
         this.profileDropdownOpen = false;
       }
+    },
+    logout() {
+      this.$store
+        .dispatch("logout")
+        .then(() => console.log("successfuly logged out"))
+        .catch(() => console.log("error logging out"));
     },
   },
   beforeDestroy() {
