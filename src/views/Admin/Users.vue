@@ -21,21 +21,21 @@
         </select>
       </div>
     </div>
-    <div class="mt-4 rounded-lg bg-white divide-y">
+    <div class="mt-4 rounded-lg bg-white divide-y overflow-hidden">
       <div>
-        <div class="grid grid-cols-7">
+        <div class="grid grid-cols-8">
           <div
             scope="col"
             class="col-span-4 px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
           >
-            Name
+            <span>Name</span>
           </div>
           <div
             class="col-span-1 px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
           >
-            Active
+            <span>Active</span>
           </div>
-          <div class="col-span-1 px-6 py-3 bg-gray-50">
+          <div class="col-span-3 px-6 py-3 bg-gray-50">
             <span class="sr-only">Edit</span>
           </div>
         </div>
@@ -54,15 +54,16 @@
           v-if="!hasUsers"
           class="grid place-items-center py-12 bg-white bg-opacity-50 z-50"
         >
-          <p class="text-gray-600 font-semibold">There are no users!</p>
+          <p class="text-gray-600 font-semibold">
+            There are no {{ statusFilter + " " || "" }}users!
+          </p>
         </div>
         <div v-else class="divide-y divide-gray-200">
-          <!-- <AdminUser
+          <AdminUser
             v-for="user in users"
             :key="`admin-user-${user.id}`"
             :user="user"
-          /> -->
-          content goes here
+          />
         </div>
       </div>
       <div v-if="hasPages" class="flex px-6 py-4">
@@ -77,8 +78,12 @@
 </template>
 
 <script>
+import AdminUser from "@/components/Admin/AdminUser";
+
 export default {
-  components: {},
+  components: {
+    AdminUser,
+  },
   data: () => ({
     options: [
       { value: "active", label: "Active" },
@@ -113,7 +118,13 @@ export default {
     getUsers(page = 1) {
       this.loading = true;
 
-      this.get(`/getUsers`)
+      const params = [];
+
+      if (page !== 1) params.push(`page=${page}`);
+      if (this.statusFilter) params.push(`status=${this.statusFilter}`);
+
+      this.$http
+        .get(`/getUsers?` + params.join("&"))
         .then(({ data }) => (this.paginator = data))
         .catch(err => console.log(err))
         .finally(() => (this.loading = false));
