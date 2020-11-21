@@ -72,6 +72,14 @@ const routes = [
                 /* webpackChunkName: "vendor-tickets" */ "../views/Vendor/Tickets.vue"
               ),
           },
+          {
+            path: "tickets/new",
+            name: "New Vendor Ticket",
+            component: () =>
+              import(
+                /* webpackChunkName: "new-vendor-ticket" */ "../views/Vendor/CreateTickets.vue"
+              ),
+          },
         ],
       },
     ],

@@ -4,7 +4,13 @@
       <h2 class="text-2xl font-medium text-gray-700">{{ user.name }}</h2>
       <div class="mt-4 pt-4 grid grid-cols-3 gap-6 border-t">
         <div class="col-span-1">
-          <Button variant="primary">New Ticket</Button>
+          <Button
+            variant="primary"
+            @click="$router.push('/vendor/tickets/new')"
+            type="button"
+          >
+            New Ticket
+          </Button>
         </div>
         <div class="col-span-2">
           <h2 class="py-2 text-xl font-medium text-gray-700">Tickets</h2>
