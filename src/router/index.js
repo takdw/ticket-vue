@@ -150,6 +150,14 @@ const routes = [
           ),
       },
       {
+        path: "vendors",
+        name: "Admin Vendors",
+        component: () =>
+          import(
+            /* webpackChunkName: "admin-vendors" */ "../views/Admin/Vendors.vue"
+          ),
+      },
+      {
         path: "tickets",
         name: "Admin Tickets",
         component: () =>

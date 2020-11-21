@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="text-2xl font-semibold text-gray-700">Users</h2>
+    <h2 class="text-2xl font-semibold text-gray-700">Vendors</h2>
     <div class="mt-4 grid grid-cols-3 gap-6">
       <div class="col-span-1">
         <select
@@ -51,10 +51,10 @@
           ></span>
         </div>
         <div
-          v-if="!hasUsers"
+          v-if="!hasVendors"
           class="grid place-items-center py-12 bg-white bg-opacity-50 z-50"
         >
-          <p class="text-gray-600 font-semibold">There are no users!</p>
+          <p class="text-gray-600 font-semibold">There are no vendors!</p>
         </div>
         <div v-else class="divide-y divide-gray-200">
           <!-- <AdminUser
@@ -68,7 +68,7 @@
       <div v-if="hasPages" class="flex px-6 py-4">
         <pagination
           :data="paginator"
-          @pagination-change-page="getUsers"
+          @pagination-change-page="getVendors"
           :limit="3"
         />
       </div>
@@ -91,14 +91,14 @@ export default {
     },
   }),
   created() {
-    this.getUsers();
+    this.getVendors();
   },
   computed: {
-    users() {
+    vendors() {
       return this.paginator.data;
     },
-    hasUsers() {
-      return !!this.users.length;
+    hasVendors() {
+      return !!this.vendors.length;
     },
     hasPages() {
       return this.paginator.last_page > 1;
@@ -108,12 +108,12 @@ export default {
     setStatusFilter(e) {
       this.statusFilter = e.target.value;
 
-      this.getUsers();
+      this.getVendors();
     },
-    getUsers(page = 1) {
+    getVendors(page = 1) {
       this.loading = true;
 
-      this.get(`/getUsers`)
+      this.get(`/getVendors`)
         .then(({ data }) => (this.paginator = data))
         .catch(err => console.log(err))
         .finally(() => (this.loading = false));
