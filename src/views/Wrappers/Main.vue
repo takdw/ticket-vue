@@ -29,7 +29,41 @@
                 class="absolute origin-top-right mt-12 right-0 top-0 w-64 z-50 shadow-xl"
               >
                 <div class="bg-white rounded-lg overflow-hidden">
-                  <ul class="p-2">
+                  <ul class="p-2" v-if="scope === 'vendor'">
+                    <li>
+                      <router-link
+                        to="/vendor/dashboard"
+                        class="block px-4 py-2 font-semibold text-sm text-gray-700 hover:text-black hover:bg-gray-200 transition duration-300 ease-in-out rounded-lg"
+                        >Dashboard</router-link
+                      >
+                    </li>
+                    <li>
+                      <router-link
+                        to="/vendor/tickets"
+                        class="block px-4 py-2 font-semibold text-sm text-gray-700 hover:text-black hover:bg-gray-200 transition duration-300 ease-in-out rounded-lg"
+                        >Tickets</router-link
+                      >
+                    </li>
+                    <li>
+                      <router-link
+                        to="/vendor/reports"
+                        class="block px-4 py-2 font-semibold text-sm text-gray-700 hover:text-black hover:bg-gray-200 transition duration-300 ease-in-out rounded-lg"
+                        >Reports</router-link
+                      >
+                    </li>
+                    <li class="border-t my-2"></li>
+                    <li>
+                      <button
+                        @click="logout"
+                        type="button"
+                        to="/profile"
+                        class="block w-full px-4 py-2 font-semibold text-sm text-gray-700 hover:text-black hover:bg-gray-200 transition duration-300 ease-in-out rounded-lg text-left"
+                      >
+                        Sign out
+                      </button>
+                    </li>
+                  </ul>
+                  <ul v-else class="p-2">
                     <li>
                       <router-link
                         to="/profile"

@@ -9,6 +9,9 @@ const Auth = {
     wallet() {
       return this.user.wallet_balance || 0;
     },
+    scope() {
+      return this.$store.state.scope;
+    },
   },
 };
 

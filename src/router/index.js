@@ -47,6 +47,25 @@ const routes = [
             /* webpackChunkName: "edit-profile" */ "../views/EditProfile.vue"
           ),
       },
+      {
+        path: "vendor",
+        component: () =>
+          import(/* webpackChunkName: "vendor" */ "../views/Vendor.vue"),
+        children: [
+          {
+            path: "/",
+            redirect: "/vendor/dashboard",
+          },
+          {
+            path: "dashboard",
+            name: "Vendor Dashboard",
+            component: () =>
+              import(
+                /* webpackChunkName: "vendor-dashboard" */ "../views/Vendor/Dashboard.vue"
+              ),
+          },
+        ],
+      },
     ],
   },
   {
