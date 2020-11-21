@@ -81,7 +81,7 @@
 </template>
 
 <script>
-import AdminTicket from "@/components/AdminTicket";
+import AdminTicket from "@/components/Admin/AdminTicket";
 
 export default {
   components: {
@@ -137,5 +137,3 @@ export default {
   },
 };
 </script>
-
-<style></style>

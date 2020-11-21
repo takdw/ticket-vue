@@ -61,7 +61,49 @@
     </header>
 
     <main>
-      <router-view></router-view>
+      <div class="container mx-auto">
+        <div class="grid grid-cols-3 gap-6">
+          <div class="col-span-1">
+            <ul class="admin-nav space-y-2 w-64">
+              <li>
+                <router-link
+                  class="block w-full px-4 py-2 rounded text-left hover:bg-gray-400 transition duration-300 ease-in-out font-semibold"
+                  to="/admin/dashboard"
+                >
+                  Dashboard
+                </router-link>
+              </li>
+              <li>
+                <router-link
+                  class="block w-full px-4 py-2 rounded text-left hover:bg-gray-400 transition duration-300 ease-in-out font-semibold"
+                  to="/admin/tickets"
+                >
+                  Tickets
+                </router-link>
+              </li>
+              <li>
+                <router-link
+                  class="block w-full px-4 py-2 rounded text-left hover:bg-gray-400 transition duration-300 ease-in-out font-semibold"
+                  to="/admin/users"
+                >
+                  Users
+                </router-link>
+              </li>
+              <li>
+                <router-link
+                  class="block w-full px-4 py-2 rounded text-left hover:bg-gray-400 transition duration-300 ease-in-out font-semibold"
+                  to="/admin/settings"
+                >
+                  Settings
+                </router-link>
+              </li>
+            </ul>
+          </div>
+          <div class="col-span-2">
+            <router-view></router-view>
+          </div>
+        </div>
+      </div>
     </main>
 
     <footer>
@@ -124,3 +166,9 @@ export default {
   },
 };
 </script>
+
+<style>
+.admin-nav .router-link-exact-active {
+  @apply bg-indigo-500 text-white hover:bg-indigo-400;
+}
+</style>

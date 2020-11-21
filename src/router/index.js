@@ -149,6 +149,30 @@ const routes = [
             /* webpackChunkName: "admin-dashboard" */ "../views/Admin/Dashboard.vue"
           ),
       },
+      {
+        path: "tickets",
+        name: "Admin Tickets",
+        component: () =>
+          import(
+            /* webpackChunkName: "admin-tickets" */ "../views/Admin/Tickets.vue"
+          ),
+      },
+      {
+        path: "users",
+        name: "Admin Users",
+        component: () =>
+          import(
+            /* webpackChunkName: "admin-users" */ "../views/Admin/Users.vue"
+          ),
+      },
+      {
+        path: "settings",
+        name: "Admin Settings",
+        component: () =>
+          import(
+            /* webpackChunkName: "admin-settings" */ "../views/Admin/Settings.vue"
+          ),
+      },
     ],
   },
 ];
