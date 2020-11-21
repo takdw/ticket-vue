@@ -122,7 +122,10 @@ export default {
     logout() {
       this.$store
         .dispatch("logout")
-        .then(() => console.log("successfuly logged out"))
+        .then(() => {
+          this.$router.go();
+          console.log("successfuly logged out");
+        })
         .catch(() => console.log("error logging out"));
     },
   },
