@@ -24,7 +24,7 @@
 }
 
 .page-item.active .page-link {
-    @apply text-gray-900;
+    @apply text-gray-900 bg-gray-200;
 }
 
 .page-item + .page-item {

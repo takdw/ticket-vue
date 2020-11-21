@@ -126,6 +126,31 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "signup" */ "../views/Auth/SignUp.vue"),
   },
+  {
+    path: "/admin/login",
+    name: "Admin Login",
+    component: () =>
+      import(/* webpackChunkName: "admin-login" */ "../views/Admin/Login.vue"),
+  },
+  {
+    path: "/admin",
+    component: () =>
+      import(/* webpackChunkName: "admin" */ "../views/Admin.vue"),
+    children: [
+      {
+        path: "/",
+        redirect: "/admin/dashboard",
+      },
+      {
+        path: "dashboard",
+        name: "Admin Dashboard",
+        component: () =>
+          import(
+            /* webpackChunkName: "admin-dashboard" */ "../views/Admin/Dashboard.vue"
+          ),
+      },
+    ],
+  },
 ];
 
 const router = new VueRouter({
