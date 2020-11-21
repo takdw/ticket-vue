@@ -123,12 +123,22 @@
               ></textarea>
             </div>
             <div class="text-center">
+              <Button :loading="loading">Save</Button>
               <Button
+                @click="publish"
+                type="button"
                 :loading="loading"
                 variant="primary"
-                class="mt-4 px-12 py-2 rounded-lg text-white font-bold bg-indigo-500 hover:bg-indigo-400 transition duration-300 ease-in-out"
+                class="ml-4"
+                >Publish</Button
               >
-                Save
+              <Button
+                @click="$router.go(-1)"
+                type="button"
+                variant="outline"
+                class="ml-4"
+              >
+                Cancel
               </Button>
             </div>
           </form>
@@ -162,10 +172,14 @@ export default {
     city: "Addis Ababa",
     price: 30000,
     additional_info: "Gates open at 12:30PM",
+    publish: false,
   }),
   computed: {},
   methods: {
-    create() {
+    publish() {
+      this.create(true);
+    },
+    create(publish = false) {
       this.loading = true;
 
       const date = DateTime.fromFormat(
@@ -181,6 +195,7 @@ export default {
         city: this.city,
         price: this.price,
         additional_info: this.additional_info,
+        publish,
       };
 
       this.$http

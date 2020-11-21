@@ -32,6 +32,8 @@ export default {
           return !this.loading ? "bg-white" : "bg-gray-200";
         case "danger":
           return !this.loading ? "bg-red-600" : "bg-red-400";
+        case "outline":
+          return "bg-white";
         default:
           return !this.loading ? "bg-gray-800" : "bg-gray-600";
       }
@@ -40,6 +42,8 @@ export default {
       switch (this.variant) {
         case "secondary":
           return "text-gray-700";
+        case "outline":
+          return this.loading ? "text-gray-500" : "text-gray-700";
         case "primary":
         case "danger":
         default:
@@ -55,6 +59,12 @@ export default {
           return `${this.bg} ${
             this.text
           } hover:bg-indigo-400 focus:border-indigo-700 active:bg-indigo-600 focus:shadow-outline-indigo ${
+            this.loading ? "cursor-wait" : ""
+          }`;
+        case "outline":
+          return `${this.bg} ${this.text} ${
+            this.loading ? "border-gray-400" : "border-gray-500"
+          } hover:border-gray-800 hover:text-gray-900 focus:border-gray-800 active:bg-gray-800 focus:shadow-outline-black ${
             this.loading ? "cursor-wait" : ""
           }`;
         default:
