@@ -80,6 +80,14 @@ const routes = [
                 /* webpackChunkName: "new-vendor-ticket" */ "../views/Vendor/CreateTickets.vue"
               ),
           },
+          {
+            path: "tickets/:id/edit",
+            name: "Edit Vendor Ticket",
+            component: () =>
+              import(
+                /* webpackChunkName: "edit-vendor-ticket" */ "../views/Vendor/EditTicket.vue"
+              ),
+          },
         ],
       },
     ],

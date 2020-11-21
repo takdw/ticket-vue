@@ -69,7 +69,8 @@
       class="col-span-1 grid place-items-center whitespace-nowrap text-right text-sm font-medium"
     >
       <router-link
-        :to="`vendor/tickets/${ticket.id}/edit`"
+        v-if="canEdit"
+        :to="`/vendor/tickets/${ticket.id}/edit`"
         class="p-2 text-gray-500 hover:text-gray-900 transition duration-300 ease-in-out focus:outline-none focus:text-indigo-500"
       >
         <svg
@@ -125,6 +126,9 @@ export default {
       return this.approved
         ? DateTime.fromISO(this.approved).toLocaleString(DateTime.DATE_FULL)
         : "";
+    },
+    canEdit() {
+      return !(this.publishedAt || this.approvedAt);
     },
   },
   methods: {},
