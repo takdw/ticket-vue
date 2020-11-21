@@ -28,6 +28,11 @@ router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth && !store.getters.isLoggedIn) {
     next("/login");
   }
+
+  if (to.meta.requiresAuth && store.state.scope !== to.meta.scope) {
+    next("/");
+  }
+
   next();
 });
 

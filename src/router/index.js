@@ -28,6 +28,7 @@ const routes = [
           import(/* webpackChunkName: "buy-ticket" */ "../views/BuyTicket.vue"),
         meta: {
           requiresAuth: true,
+          scope: "user",
         },
       },
       {
@@ -37,6 +38,7 @@ const routes = [
           import(/* webpackChunkName: "profile" */ "../views/Profile.vue"),
         meta: {
           requiresAuth: true,
+          scope: "user",
         },
       },
       {
@@ -46,6 +48,10 @@ const routes = [
           import(
             /* webpackChunkName: "edit-profile" */ "../views/EditProfile.vue"
           ),
+        meta: {
+          requiresAuth: true,
+          scope: "user",
+        },
       },
       {
         path: "vendor",
@@ -63,6 +69,10 @@ const routes = [
               import(
                 /* webpackChunkName: "vendor-dashboard" */ "../views/Vendor/Dashboard.vue"
               ),
+            meta: {
+              requiresAuth: true,
+              scope: "vendor",
+            },
           },
           {
             path: "tickets",
@@ -71,6 +81,10 @@ const routes = [
               import(
                 /* webpackChunkName: "vendor-tickets" */ "../views/Vendor/Tickets.vue"
               ),
+            meta: {
+              requiresAuth: true,
+              scope: "vendor",
+            },
           },
           {
             path: "tickets/new",
@@ -79,6 +93,10 @@ const routes = [
               import(
                 /* webpackChunkName: "new-vendor-ticket" */ "../views/Vendor/CreateTickets.vue"
               ),
+            meta: {
+              requiresAuth: true,
+              scope: "vendor",
+            },
           },
           {
             path: "tickets/:id/edit",
@@ -87,6 +105,10 @@ const routes = [
               import(
                 /* webpackChunkName: "edit-vendor-ticket" */ "../views/Vendor/EditTicket.vue"
               ),
+            meta: {
+              requiresAuth: true,
+              scope: "vendor",
+            },
           },
         ],
       },
