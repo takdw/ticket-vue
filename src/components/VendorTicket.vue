@@ -1,8 +1,9 @@
 <template>
-  <div class="grid grid-cols-7">
+  <div class="grid grid-cols-7 bg-white">
     <div class="col-span-4 px-6 py-4 whitespace-nowrap">
-      <div class="font-medium text-gray-900">Event Title {{ ticket }}</div>
-      <div class="text-sm text-gray-500">Venue &bull; Date and Time</div>
+      <div class="font-medium text-gray-900">{{ ticket.title }}</div>
+      <div class="text-sm text-gray-600">{{ venue }}</div>
+      <div class="text-sm text-gray-600">{{ day }} ({{ diff }})</div>
     </div>
     <div class="col-span-1 grid place-items-center px-6 py-4 whitespace-nowrap">
       <svg
@@ -37,9 +38,9 @@
     <div
       class="col-span-1 grid place-items-center whitespace-nowrap text-right text-sm font-medium"
     >
-      <button
-        type="button"
-        class="p-2 text-gray-500 hover:text-gray-900 transition duration-300 ease-in-out"
+      <router-link
+        :to="`vendor/tickets/${ticket.id}/edit`"
+        class="p-2 text-gray-500 hover:text-gray-900 transition duration-300 ease-in-out focus:outline-none focus:text-indigo-500"
       >
         <svg
           class="w-6 h-6"
@@ -53,13 +54,33 @@
             clip-rule="evenodd"
           ></path>
         </svg>
-      </button>
+      </router-link>
     </div>
   </div>
 </template>
 
 <script>
+import { DateTime } from "luxon";
+
 export default {
   props: ["ticket"],
+  data: () => ({
+    dateObj: {},
+  }),
+  created() {
+    this.dateObj = DateTime.fromISO(this.ticket.date);
+  },
+  computed: {
+    venue() {
+      return `${this.ticket.venue}, ${this.ticket.city}`;
+    },
+    day() {
+      return this.dateObj.toLocaleString(DateTime.DATE_FULL);
+    },
+    diff() {
+      return this.dateObj.toRelative();
+    },
+  },
+  methods: {},
 };
 </script>

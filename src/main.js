@@ -6,6 +6,8 @@ import axios from "axios";
 
 Vue.config.productionTip = false;
 
+Vue.component("pagination", require("laravel-vue-pagination"));
+
 var token = window.localStorage.getItem("token") || "";
 var scope = window.localStorage.getItem("scope") || "user";
 store.commit("setToken", token);

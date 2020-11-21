@@ -40,12 +40,33 @@
                         </div>
                       </div>
                     </div>
-                    <div class="bg-white divide-y divide-gray-200">
-                      <VendorTicket
-                        v-for="i in 3"
-                        :key="`vendor-ticket-${i}`"
-                        :ticket="i"
-                      />
+                    <div
+                      class="relative bg-white"
+                      :class="{ 'py-24': loading }"
+                    >
+                      <div
+                        v-if="loading"
+                        class="absolute inset-0 grid place-items-center py-6 bg-white bg-opacity-50 z-50"
+                      >
+                        <span
+                          class="block h-8 w-8 border-4 rounded-full spin border-gray-800"
+                          style="border-bottom-color: transparent"
+                        ></span>
+                      </div>
+                      <div class="divide-y divide-gray-200">
+                        <VendorTicket
+                          v-for="ticket in tickets"
+                          :key="`vendor-ticket-${ticket.id}`"
+                          :ticket="ticket"
+                        />
+                      </div>
+                    </div>
+                    <div v-if="hasPages" class="bg-white flex p-4">
+                      <pagination
+                        :data="paginator"
+                        @pagination-change-page="getTickets"
+                        :limit="3"
+                      ></pagination>
                     </div>
                   </div>
                 </div>
@@ -70,6 +91,35 @@ export default {
   components: {
     Button,
     VendorTicket,
+  },
+  data: () => ({
+    loading: true,
+    paginator: {
+      data: [],
+    },
+  }),
+  computed: {
+    tickets() {
+      return this.paginator.data;
+    },
+    hasTickets() {
+      return !!this.tickets.length;
+    },
+    hasPages() {
+      return this.paginator.last_page > 1;
+    },
+  },
+  created() {
+    this.loading = true;
+
+    this.$http
+      .get("/vendor/tickets")
+      .then(response => (this.paginator = response.data))
+      .catch(err => console.log(err))
+      .finally(() => (this.loading = false));
+  },
+  methods: {
+    getTickets() {},
   },
 };
 </script>
