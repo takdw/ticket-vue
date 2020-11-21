@@ -64,6 +64,14 @@ const routes = [
                 /* webpackChunkName: "vendor-dashboard" */ "../views/Vendor/Dashboard.vue"
               ),
           },
+          {
+            path: "tickets",
+            name: "Vendor Tickets",
+            component: () =>
+              import(
+                /* webpackChunkName: "vendor-tickets" */ "../views/Vendor/Tickets.vue"
+              ),
+          },
         ],
       },
     ],
