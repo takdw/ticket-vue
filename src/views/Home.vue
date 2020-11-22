@@ -13,20 +13,45 @@
       <div class="bg-indigo-500 rounded-lg p-6 shadow-xl">
         <input
           class="form-input w-full text-xl py-4 rounded-lg"
-          placeholder="Search for events..."
+          placeholder="Search for tickets..."
         />
       </div>
     </div>
     <div class="mt-12"></div>
-    <div class="container mx-auto">
-      <h2 class="text-2xl font-bold text-gray-700">Upcoming Events</h2>
-      <div class="grid grid-cols-3 gap-12 py-6">
-        <TicketCard
-          v-for="(ticket, index) in tickets"
-          :key="`event-grid-${index}`"
-          :ticket="ticket"
-        />
+    <div class="relative container mx-auto" :class="{ 'py-12': loading }">
+      <div
+        v-if="loading"
+        class="absolute inset-0 grid place-items-center py-12 z-50"
+      >
+        <span
+          class="block h-8 w-8 border-4 rounded-full spin border-gray-800"
+          style="border-bottom-color: transparent"
+        ></span>
       </div>
+      <template v-else>
+        <template v-if="hasTickets">
+          <h2 class="text-2xl font-bold text-gray-700">Upcoming Tickets</h2>
+          <div class="grid grid-cols-3 gap-12 py-6">
+            <TicketCard
+              v-for="(ticket, index) in tickets"
+              :key="`event-grid-${index}`"
+              :ticket="ticket"
+            />
+          </div>
+          <div class="grid place-items-center">
+            <router-link
+              class="font-bold text-gray-600 text-center hover:text-gray-900 transition duration-300 ease-in-out"
+              to="/tickets"
+              >View all tickets</router-link
+            >
+          </div>
+        </template>
+        <div v-else class="py-12">
+          <p class="font-bold text-gray-700 text-center">
+            There are no upcoming tickets available.
+          </p>
+        </div>
+      </template>
     </div>
   </div>
 </template>
@@ -40,12 +65,20 @@ export default {
   },
   data: () => ({
     tickets: [],
+    loading: false,
   }),
+  computed: {
+    hasTickets() {
+      return !!this.tickets.length;
+    },
+  },
   created() {
+    this.loading = true;
     this.$http
-      .get("tickets")
+      .get("tickets?limit=6")
       .then(response => (this.tickets = response.data))
-      .catch(err => console.log(err));
+      .catch(err => console.log(err))
+      .finally(() => (this.loading = false));
   },
 };
 </script>
