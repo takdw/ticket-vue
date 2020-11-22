@@ -23,7 +23,7 @@
     </div>
     <div class="mt-4 rounded-lg bg-white divide-y">
       <div>
-        <div class="grid grid-cols-7">
+        <div class="grid grid-cols-8">
           <div
             scope="col"
             class="col-span-4 px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
@@ -33,9 +33,14 @@
           <div
             class="col-span-1 px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
           >
+            Verified
+          </div>
+          <div
+            class="col-span-1 px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+          >
             Active
           </div>
-          <div class="col-span-1 px-6 py-3 bg-gray-50">
+          <div class="col-span-2 px-6 py-3 bg-gray-50">
             <span class="sr-only">Edit</span>
           </div>
         </div>
@@ -54,15 +59,18 @@
           v-if="!hasVendors"
           class="grid place-items-center py-12 bg-white bg-opacity-50 z-50"
         >
-          <p class="text-gray-600 font-semibold">There are no vendors!</p>
+          <p class="text-gray-600 font-semibold">
+            There are no
+            {{ statusFilter || "" }}
+            vendors!
+          </p>
         </div>
         <div v-else class="divide-y divide-gray-200">
-          <!-- <AdminUser
-            v-for="user in users"
-            :key="`admin-user-${user.id}`"
-            :user="user"
-          /> -->
-          content goes here
+          <AdminVendor
+            v-for="vendor in vendors"
+            :key="`admin-vendor-${vendor.id}`"
+            :vendor="vendor"
+          />
         </div>
       </div>
       <div v-if="hasPages" class="flex px-6 py-4">
@@ -77,8 +85,12 @@
 </template>
 
 <script>
+import AdminVendor from "@/components/Admin/AdminVendor";
+
 export default {
-  components: {},
+  components: {
+    AdminVendor,
+  },
   data: () => ({
     options: [
       { value: "active", label: "Active" },
@@ -113,7 +125,13 @@ export default {
     getVendors(page = 1) {
       this.loading = true;
 
-      this.get(`/getVendors`)
+      const params = [];
+
+      if (page !== 1) params.push(`page=${page}`);
+      if (this.statusFilter) params.push(`status=${this.statusFilter}`);
+
+      this.$http
+        .get(`/getVendors?` + params.join("&"))
         .then(({ data }) => (this.paginator = data))
         .catch(err => console.log(err))
         .finally(() => (this.loading = false));
