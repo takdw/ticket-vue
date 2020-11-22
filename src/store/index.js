@@ -25,6 +25,11 @@ export default new Vuex.Store({
   },
   getters: {
     isLoggedIn: state => state.auth,
+    isAdmin: state => {
+      const rolesList = state.user.roles_list;
+      if (rolesList && rolesList.includes("admin")) return true;
+      return false;
+    },
   },
   actions: {
     check: ({ commit, state }) => {

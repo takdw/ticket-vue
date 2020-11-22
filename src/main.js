@@ -33,6 +33,10 @@ router.beforeEach((to, from, next) => {
     next("/");
   }
 
+  if (to.meta.requiresAdmin && !store.getters.isAdmin) {
+    next("/");
+  }
+
   next();
 });
 

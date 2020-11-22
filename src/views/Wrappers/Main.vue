@@ -64,7 +64,14 @@
                     </li>
                   </ul>
                   <ul v-else class="p-2">
-                    <li>
+                    <li v-if="isAdmin">
+                      <router-link
+                        to="/admin/dashboard"
+                        class="block px-4 py-2 font-semibold text-sm text-gray-700 hover:text-black hover:bg-gray-200 transition duration-300 ease-in-out rounded-lg"
+                        >Dashboard</router-link
+                      >
+                    </li>
+                    <li v-else>
                       <router-link
                         to="/profile"
                         class="block px-4 py-2 font-semibold text-sm text-gray-700 hover:text-black hover:bg-gray-200 transition duration-300 ease-in-out rounded-lg"

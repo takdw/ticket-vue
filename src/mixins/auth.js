@@ -12,6 +12,9 @@ const Auth = {
     scope() {
       return this.$store.state.scope;
     },
+    isAdmin() {
+      return this.$store.getters.isAdmin;
+    },
   },
 };
 

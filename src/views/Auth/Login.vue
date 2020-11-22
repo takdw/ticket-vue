@@ -97,7 +97,10 @@ export default {
           password: this.password,
         })
         .then(response => {
-          setTimeout(() => this.$router.push("/"), 150);
+          const roles_list = this.$store.state.user.roles_list;
+          if (roles_list && roles_list.includes("admin"))
+            this.$router.push("/admin");
+          else this.$router.push("/");
         })
         .catch(err => {
           if (err.response.data.email || err.response.data.tin) {

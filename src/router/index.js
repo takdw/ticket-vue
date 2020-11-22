@@ -148,6 +148,9 @@ const routes = [
           import(
             /* webpackChunkName: "admin-dashboard" */ "../views/Admin/Dashboard.vue"
           ),
+        meta: {
+          requiresAdmin: true,
+        },
       },
       {
         path: "vendors",
@@ -156,6 +159,9 @@ const routes = [
           import(
             /* webpackChunkName: "admin-vendors" */ "../views/Admin/Vendors.vue"
           ),
+        meta: {
+          requiresAdmin: true,
+        },
       },
       {
         path: "tickets",
@@ -164,6 +170,9 @@ const routes = [
           import(
             /* webpackChunkName: "admin-tickets" */ "../views/Admin/Tickets.vue"
           ),
+        meta: {
+          requiresAdmin: true,
+        },
       },
       {
         path: "users",
@@ -172,6 +181,9 @@ const routes = [
           import(
             /* webpackChunkName: "admin-users" */ "../views/Admin/Users.vue"
           ),
+        meta: {
+          requiresAdmin: true,
+        },
       },
       {
         path: "settings",
@@ -180,6 +192,9 @@ const routes = [
           import(
             /* webpackChunkName: "admin-settings" */ "../views/Admin/Settings.vue"
           ),
+        meta: {
+          requiresAdmin: true,
+        },
       },
     ],
   },
