@@ -31,16 +31,18 @@
               </p>
             </div>
             <div class="mt-8 space-x-8">
-              <button
+              <router-link
+                to="/vendor/edit"
                 class="px-6 py-2 text-indigo-200 text-sm border border-indigo-300 hover:text-white hover:border-white rounded-full hover:text-white transition duration-300 ease-in-out"
               >
                 Edit Information
-              </button>
-              <button
+              </router-link>
+              <router-link
+                to="/vendor/tickets/new"
                 class="px-6 py-2 text-indigo-200 text-sm border border-indigo-300 hover:text-white hover:border-white rounded-full hover:text-white transition duration-300 ease-in-out"
               >
                 Create a new Ticket
-              </button>
+              </router-link>
             </div>
           </div>
         </div>

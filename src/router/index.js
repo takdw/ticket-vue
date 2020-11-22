@@ -93,6 +93,18 @@ const routes = [
             },
           },
           {
+            path: "edit",
+            name: "Edit Vendor",
+            component: () =>
+              import(
+                /* webpackChunkName: "vendor-edit" */ "../views/Vendor/Edit.vue"
+              ),
+            meta: {
+              requiresAuth: true,
+              scope: "vendor",
+            },
+          },
+          {
             path: "tickets/new",
             name: "New Vendor Ticket",
             component: () =>
