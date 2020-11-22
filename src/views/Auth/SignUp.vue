@@ -153,6 +153,16 @@
               >.
             </p>
           </div>
+          <div class="mt-4 pt-4 text-center border-t border-gray-600">
+            <p class="text-sm text-gray-600">
+              Are you a vendor? Register
+              <router-link
+                class="text-gray-600 font-semibold hover:underline"
+                to="/vendor/signup"
+                >here</router-link
+              >.
+            </p>
+          </div>
         </form>
       </div>
     </div>
