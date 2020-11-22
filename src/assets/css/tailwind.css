@@ -31,4 +31,20 @@
     @apply border-l;
 }
 
+.tickets-page .pagination {
+    @apply border-none space-x-2;
+}
+
+.tickets-page .page-item .page-link {
+    @apply block flex justify-center items-center font-semibold block py-2 px-4 text-gray-600 rounded-full hover:text-gray-800;
+}
+
+.tickets-page .page-item.active .page-link {
+    @apply text-white bg-indigo-500;
+}
+
+.tickets-page .page-item + .page-item {
+    @apply border-none;
+}
+
 @tailwind utilities;
