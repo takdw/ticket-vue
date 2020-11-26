@@ -15,7 +15,7 @@
         <div class="h-56 overflow-hidden">
           <img
             class="w-full object-fit"
-            src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"
+            :src="posterPath"
             :alt="ticket.title"
           />
         </div>
@@ -65,6 +65,9 @@ export default {
     },
     price() {
       return (this.ticket.price / 100).toFixed(2);
+    },
+    posterPath() {
+      return process.env.VUE_APP_BACKEND_URL + "storage/" + this.ticket.poster;
     },
   },
 };
