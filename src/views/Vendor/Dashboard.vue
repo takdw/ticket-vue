@@ -55,7 +55,9 @@
               class="rounded-lg bg-white px-12 py-6 font-semibold overflow-hidden shadow-lg"
             >
               <p class="text-gray-700">Total Events</p>
-              <p class="text-6xl text-indigo-500">54</p>
+              <p class="text-6xl text-indigo-500">
+                <span>{{ stats.total_events || 0 }}</span>
+              </p>
             </div>
           </div>
           <div class="col-span-1">
@@ -63,7 +65,9 @@
               class="rounded-lg bg-white px-12 py-6 font-semibold overflow-hidden shadow-lg"
             >
               <p class="text-gray-700">Total Tickets Sold</p>
-              <p class="text-6xl text-indigo-500">1,209</p>
+              <p class="text-6xl text-indigo-500">
+                <span>{{ stats.total_tickets_sold || 0 }}</span>
+              </p>
             </div>
           </div>
           <div class="col-span-1">
@@ -72,16 +76,12 @@
             >
               <p class="text-gray-700">Total Revenue</p>
               <p class="text-6xl text-gray-800">
-                <span class="text-indigo-500">67,890</span>
+                <span class="text-indigo-500">{{ revenue || 0 }}</span>
                 <span class="ml-2 uppercase text-base">etb</span>
               </p>
             </div>
           </div>
         </div>
-      </div>
-      <div class="col-span-3">
-        <h2 class="text-2xl font-bold text-gray-700">Latest Activity</h2>
-        <div>Activity List</div>
       </div>
     </div>
   </div>
@@ -97,6 +97,7 @@ export default {
   components: {},
   data: () => ({
     loading: false,
+    stats: {},
   }),
   computed: {
     joined() {
@@ -104,7 +105,17 @@ export default {
         DateTime.DATE_FULL
       );
     },
+    revenue() {
+      return this.stats.total_revenue
+        ? (this.stats.total_revenue / 100).toFixed(2)
+        : 0;
+    },
   },
-  created() {},
+  created() {
+    this.$http
+      .get("/vendor/stats")
+      .then(({ data }) => (this.stats = data))
+      .catch(err => console.log(err));
+  },
 };
 </script>
