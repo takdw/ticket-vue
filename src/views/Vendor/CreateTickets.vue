@@ -122,6 +122,18 @@
                 v-model="additional_info"
               ></textarea>
             </div>
+            <div>
+              <label
+                class="block font-semibold text-sm uppercase text-gray-600"
+                for="additional_info"
+              >
+                Poster
+              </label>
+              <PhotoUploadInput
+                :data="{ id: 'license', existing: {} }"
+                v-model="poster"
+              />
+            </div>
             <div class="text-center">
               <Button :loading="loading">Save</Button>
               <Button
@@ -155,12 +167,14 @@ import Auth from "@/mixins/auth";
 
 import Button from "@/components/Button";
 import VendorTicket from "@/components/VendorTicket";
+import PhotoUploadInput from "@/components/PhotoUploadInput";
 
 export default {
   mixins: [Auth],
   components: {
     Button,
     VendorTicket,
+    PhotoUploadInput,
   },
   data: () => ({
     loading: false,
@@ -172,7 +186,7 @@ export default {
     city: "Addis Ababa",
     price: 30000,
     additional_info: "Gates open at 12:30PM",
-    publish: false,
+    poster: "",
   }),
   computed: {},
   methods: {
@@ -187,19 +201,23 @@ export default {
         "d-M-yyyy t"
       ).toLocaleString(DateTime.DATETIME_MED);
 
-      const data = {
-        title: this.title,
-        subtitle: this.subtitle,
-        date,
-        venue: this.venue,
-        city: this.city,
-        price: this.price,
-        additional_info: this.additional_info,
-        publish,
-      };
+      const fd = new FormData();
+      fd.append("title", this.title);
+      fd.append("subtitle", this.subtitle);
+      fd.append("date", date);
+      fd.append("venue", this.venue);
+      fd.append("city", this.city);
+      fd.append("price", this.price);
+      fd.append("additional_info", this.additional_info);
+      fd.append("poster", this.poster);
+      fd.append("publish", publish);
 
       this.$http
-        .post(`/vendors/${this.user.id}/tickets`, data)
+        .post(`/vendors/${this.user.id}/tickets`, fd, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
         .then(response => {
           this.$router.push("/vendor/tickets");
         })
