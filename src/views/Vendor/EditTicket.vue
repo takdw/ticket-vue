@@ -8,7 +8,7 @@
           <p class="text-gray-700">Edit the ticket information</p>
         </div>
         <div class="col-span-2">
-          <form @submit.prevent="create" class="space-y-3">
+          <form @submit.prevent="update" class="space-y-3">
             <div>
               <label
                 class="block font-semibold text-sm uppercase text-gray-600"
@@ -169,7 +169,7 @@ export default {
   },
   created() {
     this.$http
-      .get(`/tickets/${this.id}`)
+      .get(`/vendor/tickets/${this.id}`)
       .then(({ data }) => {
         if (data.published_at || data.approved_at) {
           this.$router.push("/vendor/tickets");
@@ -209,22 +209,22 @@ export default {
       this.loading = true;
 
       const date = DateTime.fromFormat(
-        `${this.date} ${this.time}`,
+        `${this.ticket.date} ${this.ticket.time}`,
         "d-M-yyyy t"
       ).toLocaleString(DateTime.DATETIME_MED);
 
       const data = {
-        title: this.title,
-        subtitle: this.subtitle,
+        title: this.ticket.title,
+        subtitle: this.ticket.subtitle,
         date,
-        venue: this.venue,
-        city: this.city,
-        price: this.price,
-        additional_info: this.additional_info,
+        venue: this.ticket.venue,
+        city: this.ticket.city,
+        price: this.ticket.price,
+        additional_info: this.ticket.additional_info,
       };
 
       this.$http
-        .post(`/vendors/${this.user.id}/tickets`, data)
+        .post(`/vendor/tickets/${this.id}/edit`, data)
         .then(response => {
           this.$router.push("/vendor/tickets");
         })
