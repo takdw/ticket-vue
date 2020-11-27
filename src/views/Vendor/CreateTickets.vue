@@ -193,7 +193,7 @@ export default {
     publish() {
       this.create(true);
     },
-    create(publish = false) {
+    create(publishNow = false) {
       this.loading = true;
 
       const date = DateTime.fromFormat(
@@ -210,7 +210,7 @@ export default {
       fd.append("price", this.price);
       fd.append("additional_info", this.additional_info);
       fd.append("poster", this.poster);
-      fd.append("publish", publish);
+      fd.append("publish", publishNow);
 
       this.$http
         .post(`/vendors/${this.user.id}/tickets`, fd, {
