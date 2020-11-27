@@ -219,7 +219,7 @@ export default {
       fd.append("country", this.country);
       fd.append("password", this.password);
       fd.append("password_confirmation", this.password_confirmation);
-      if (this.profile_picture)
+      if (this.profile_picture.size)
         fd.append("profile_picture", this.profile_picture);
 
       this.$http
