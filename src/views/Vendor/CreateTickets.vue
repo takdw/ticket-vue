@@ -130,7 +130,7 @@
                 Poster
               </label>
               <PhotoUploadInput
-                :data="{ id: 'license', existing: {} }"
+                :data="{ id: 'license', existing: '' }"
                 v-model="poster"
               />
             </div>

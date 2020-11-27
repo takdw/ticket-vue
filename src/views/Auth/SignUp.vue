@@ -145,7 +145,7 @@
               >Profile Picture</label
             >
             <PhotoUploadInput
-              :data="{ id: 'profile', existing: {} }"
+              :data="{ id: 'profile', existing: '' }"
               v-model="profile_picture"
             />
           </div>
