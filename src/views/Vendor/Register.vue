@@ -85,11 +85,39 @@
           <div>
             <label
               class="block font-semibold text-sm uppercase text-gray-600"
+              for="password"
+              >Password</label
+            >
+            <input
+              id="password"
+              class="form-input w-full mt-1"
+              placeholder=""
+              type="password"
+              v-model="password"
+            />
+          </div>
+          <div>
+            <label
+              class="block font-semibold text-sm uppercase text-gray-600"
+              for="password_confirmation"
+              >Confirm Password</label
+            >
+            <input
+              id="password_confirmation"
+              class="form-input w-full mt-1"
+              placeholder=""
+              type="password"
+              v-model="password_confirmation"
+            />
+          </div>
+          <div>
+            <label
+              class="block font-semibold text-sm uppercase text-gray-600"
               for="license"
               >License</label
             >
             <PhotoUploadInput
-              :data="{ id: 'license', existing: {} }"
+              :data="{ id: 'license', existing: '' }"
               v-model="license"
             />
           </div>
@@ -100,7 +128,7 @@
               >Logo</label
             >
             <PhotoUploadInput
-              :data="{ id: 'logo', existing: {} }"
+              :data="{ id: 'logo', existing: '' }"
               v-model="logo"
             />
           </div>
@@ -111,7 +139,7 @@
               >Image</label
             >
             <PhotoUploadInput
-              :data="{ id: 'image', existing: {} }"
+              :data="{ id: 'image', existing: '' }"
               v-model="image"
             />
           </div>
@@ -170,6 +198,8 @@ export default {
     name: "",
     email: "",
     phone_number: "",
+    password: "",
+    password_confirmation: "",
     license: {},
     logo: {},
     image: {},
@@ -181,7 +211,12 @@ export default {
       this.creating = true;
 
       const fd = new FormData();
-      if (this.name) fd.append("name", this.name);
+      fd.append("tin", this.tin);
+      fd.append("name", this.name);
+      fd.append("email", this.email);
+      fd.append("phone_number", this.phone_number);
+      fd.append("password", this.password);
+      fd.append("password_confirmation", this.password_confirmation);
       if (this.license.size) fd.append("license", this.license);
       if (this.logo.size) fd.append("logo", this.logo);
       if (this.image.size) fd.append("image", this.image);
@@ -192,7 +227,7 @@ export default {
             "Content-Type": "multipart/form-data",
           },
         })
-        .then(response => console.log(response.data))
+        .then(response => this.$router.push("/login"))
         .catch(err => console.log(err))
         .finally(() => (this.creating = false));
     },
