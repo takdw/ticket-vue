@@ -5,11 +5,11 @@
         <div
           class="flex space-x-8 mt-2 bg-gray-800 rounded-lg px-8 py-4 text-white"
         >
-          <div class="w-48">
+          <div class="w-48 h-48">
             <img
-              class="object-cover rounded-full"
-              src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&h=500&q=80"
-              alt="Profile Picture"
+              class="w-full h-full object-cover rounded-full"
+              :src="logoPath"
+              :alt="user.name"
             />
           </div>
           <div>
@@ -109,6 +109,11 @@ export default {
       return this.stats.total_revenue
         ? (this.stats.total_revenue / 100).toFixed(2)
         : 0;
+    },
+    logoPath() {
+      return (
+        process.env.VUE_APP_BACKEND_URL + "/storage/" + this.user.logo_path
+      );
     },
   },
   created() {

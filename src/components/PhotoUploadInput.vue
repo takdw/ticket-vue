@@ -16,8 +16,8 @@
           :title="hasFile ? file.name : filename"
         >
           <span v-if="hasFile">{{ file.name }}</span>
-          <span v-if="hasExisting">{{ filename }}</span>
-          <span v-else>Select a file</span>
+          <span v-if="hasExisting">{{ filename.split("/").pop() }}</span>
+          <span v-if="!hasFile && !hasExisting">Select a file</span>
         </button>
         <div
           v-if="hasFile || hasExisting"
@@ -82,8 +82,8 @@
             >
               <img
                 class="w-full object-cover"
-                :src="previewData"
-                :alt="file.name"
+                :src="previewData || (existing ? getPath(existing) : '')"
+                :alt="filename"
               />
             </div>
           </transition>
@@ -107,35 +107,27 @@ export default {
     preview: false,
     mainPrev: false,
     previewData: "",
-    existing: {},
+    existing: "",
     removeExisting: false,
   }),
   watch: {
     data(newValue) {
       this.existing = newValue.existing;
-      this.previewData = newValue.existing.preview;
     },
   },
   created() {
     this.ref = Math.random().toString(36).substring(7);
     this.existing = this.data.existing;
   },
-  mounted() {
-    this.previewData = this.data.existing.preview;
-  },
   computed: {
     hasFile() {
       return this.file instanceof File;
     },
     filename() {
-      return this.file.name || this.existing.filename;
+      return this.file.name || this.existing;
     },
     hasExisting() {
-      return !!(
-        this.existing.filename &&
-        this.existing.preview &&
-        !this.removeExisting
-      );
+      return !!(this.existing && !this.removeExisting);
     },
   },
   methods: {
@@ -168,6 +160,9 @@ export default {
       this.file = {};
       this.removeExisting = true;
       this.$emit("input", {});
+    },
+    getPath(path) {
+      return process.env.VUE_APP_BACKEND_URL + "/storage/" + path;
     },
   },
 };

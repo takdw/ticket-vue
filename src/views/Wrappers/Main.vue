@@ -151,11 +151,21 @@ export default {
       return new Date().getFullYear();
     },
     profilePath() {
-      return this.user && this.user.profile_picture
-        ? process.env.VUE_APP_BACKEND_URL +
-            "storage/" +
-            this.user.profile_picture
-        : "https://www.colorbook.io/imagecreator.php?width=300&height=300&hex=&text=";
+      if (this.user && this.user.profile_picture) {
+        return (
+          process.env.VUE_APP_BACKEND_URL +
+          "storage/" +
+          this.user.profile_picture
+        );
+      }
+
+      if (this.user && this.user.logo_path) {
+        return (
+          process.env.VUE_APP_BACKEND_URL + "storage/" + this.user.logo_path
+        );
+      }
+
+      return "https://www.colorbook.io/imagecreator.php?width=300&height=300&hex=&text=";
     },
   },
   methods: {

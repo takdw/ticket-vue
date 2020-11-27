@@ -122,7 +122,6 @@
           </form>
         </div>
       </div>
-      <div></div>
     </div>
   </div>
 </template>
@@ -149,22 +148,16 @@ export default {
     license: {},
     logo: {},
     image: {},
-    existingLicense: {},
-    existingLogo: {},
-    existingImage: {},
+    existingLicense: "",
+    existingLogo: "",
+    existingImage: "",
   }),
   created() {
     this.tin = this.user.tin;
     this.name = this.user.name;
-
-    this.$http
-      .get("/vendor/getMedia")
-      .then(({ data }) => {
-        this.existingImage = data.image;
-        this.existingLogo = data.logo;
-        this.existingLicense = data.license;
-      })
-      .catch(err => console.log(err));
+    this.existingLicense = this.user.license_path;
+    this.existingLogo = this.user.logo_path;
+    this.existingImage = this.user.image_path;
   },
   computed: {},
   methods: {
