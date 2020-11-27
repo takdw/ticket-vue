@@ -3,7 +3,12 @@
     <h2 class="text-2xl font-bold text-gray-700">Tickets</h2>
     <div class="my-4 border-t border-b grid grid-cols-3 py-4">
       <div class="col-span-1">
-        <input class="form-input w-full" placeholder="Search..." />
+        <input
+          @keyup="search"
+          v-model="searchQuery"
+          class="form-input w-full"
+          placeholder="Search..."
+        />
       </div>
     </div>
     <div class="relative" :class="{ 'py-24': loading && !hasTickets }">
@@ -45,6 +50,8 @@
 </template>
 
 <script>
+import { debounce } from "debounce";
+
 import TicketCard from "@/components/TicketCard";
 
 export default {
@@ -56,6 +63,7 @@ export default {
       data: [],
     },
     loading: false,
+    searchQuery: "",
   }),
   computed: {
     tickets() {
@@ -69,6 +77,10 @@ export default {
     },
   },
   created() {
+    if (this.$route.query.search) {
+      this.searchQuery = this.$route.query.search;
+    }
+
     this.getTickets();
   },
   methods: {
@@ -78,6 +90,7 @@ export default {
       const params = [];
 
       if (page !== 1) params.push("page=" + page);
+      if (this.searchQuery) params.push("search=" + this.searchQuery);
 
       this.$http
         .get("tickets?" + params.join("&"))
@@ -85,6 +98,9 @@ export default {
         .catch(err => console.log(err))
         .finally(() => (this.loading = false));
     },
+    search: debounce(function () {
+      this.getTickets();
+    }, 300),
   },
 };
 </script>

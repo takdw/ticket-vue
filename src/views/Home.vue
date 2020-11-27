@@ -12,6 +12,7 @@
     <div class="container mx-auto -mt-12 px-24">
       <div class="bg-indigo-500 rounded-lg p-6 shadow-xl">
         <input
+          @keyup="search"
           class="form-input w-full text-xl py-4 rounded-lg"
           placeholder="Search for tickets..."
         />
@@ -57,6 +58,8 @@
 </template>
 
 <script>
+import { debounce } from "debounce";
+
 import TicketCard from "@/components/TicketCard";
 
 export default {
@@ -79,6 +82,16 @@ export default {
       .then(response => (this.tickets = response.data))
       .catch(err => console.log(err))
       .finally(() => (this.loading = false));
+  },
+  methods: {
+    search: debounce(function (e) {
+      this.$router.push({
+        path: "/tickets",
+        query: {
+          search: e.target.value,
+        },
+      });
+    }, 1000),
   },
 };
 </script>
