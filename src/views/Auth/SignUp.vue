@@ -35,7 +35,7 @@
               >Name</label
             >
             <input
-              v-model="form.name"
+              v-model="name"
               class="form-input w-full mt-1"
               :class="{ 'border-red-500': errors.name }"
               id="name"
@@ -52,7 +52,7 @@
               >Email</label
             >
             <input
-              v-model="form.email"
+              v-model="email"
               type="email"
               id="email"
               class="form-input w-full mt-1"
@@ -71,7 +71,7 @@
               >Phone Number</label
             >
             <input
-              v-model="form.phone_number"
+              v-model="phone_number"
               class="form-input w-full mt-1"
               :class="{ 'border-red-500': errors.phone_number }"
               id="phone_number"
@@ -111,7 +111,7 @@
               >Password</label
             >
             <input
-              v-model="form.password"
+              v-model="password"
               class="form-input w-full mt-1"
               :class="{ 'border-red-500': errors.password }"
               id="password"
@@ -131,11 +131,22 @@
               Confirm Password
             </label>
             <input
-              v-model="form.password_confirmation"
+              v-model="password_confirmation"
               class="form-input w-full mt-1"
               id="password_confirmation"
               type="password"
               placeholder="Confirm Password"
+            />
+          </div>
+          <div>
+            <label
+              class="block font-semibold text-sm uppercase text-gray-600"
+              for="image"
+              >Profile Picture</label
+            >
+            <PhotoUploadInput
+              :data="{ id: 'profile', existing: {} }"
+              v-model="profile_picture"
             />
           </div>
           <div class="text-center">
@@ -171,21 +182,22 @@
 
 <script>
 import Button from "@/components/Button";
+import PhotoUploadInput from "@/components/PhotoUploadInput";
 
 export default {
   components: {
     Button,
+    PhotoUploadInput,
   },
   data: () => ({
     working: false,
-    form: {
-      name: "",
-      email: "",
-      phone_number: "",
-      country: "",
-      password: "",
-      password_confirmation: "",
-    },
+    name: "",
+    email: "",
+    phone_number: "",
+    country: "",
+    password: "",
+    password_confirmation: "",
+    profile_picture: "",
     errors: {},
   }),
   methods: {
@@ -195,14 +207,26 @@ export default {
       }
     },
     selectCountry(e) {
-      this.form.country = e.target.value;
+      this.country = e.target.value;
     },
     signup() {
       this.working = true;
 
+      const fd = new FormData();
+      fd.append("name", this.name);
+      fd.append("email", this.email);
+      fd.append("phone_number", this.phone_number);
+      fd.append("country", this.country);
+      fd.append("password", this.password);
+      fd.append("password_confirmation", this.password_confirmation);
+      if (this.profile_picture)
+        fd.append("profile_picture", this.profile_picture);
+
       this.$http
-        .post("/users", {
-          ...this.form,
+        .post("/users", fd, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         })
         .then(() => this.$router.push("/login"))
         .catch(err => {
