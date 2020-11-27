@@ -19,8 +19,8 @@
               >
                 <img
                   class="h-10 w-10 object-cover rounded-full"
-                  src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=300&h=300&q=80"
-                  alt="Profile Picture"
+                  :src="profilePath"
+                  :alt="user.name"
                 />
                 <span class="ml-4">{{ user.name }}</span>
               </div>
@@ -149,6 +149,13 @@ export default {
   computed: {
     year() {
       return new Date().getFullYear();
+    },
+    profilePath() {
+      return this.user && this.user.profile_picture
+        ? process.env.VUE_APP_BACKEND_URL +
+            "storage/" +
+            this.user.profile_picture
+        : "https://www.colorbook.io/imagecreator.php?width=300&height=300&hex=&text=";
     },
   },
   methods: {

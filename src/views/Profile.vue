@@ -6,8 +6,8 @@
           <div class="px-12">
             <img
               class="object-cover rounded-full"
-              src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&h=500&q=80"
-              alt="Profile Picture"
+              :src="profilePath"
+              :alt="user.name"
             />
           </div>
           <div class="mt-4">
@@ -83,6 +83,13 @@ export default {
     },
     balance() {
       return (this.user.wallet_balance / 100).toFixed(2);
+    },
+    profilePath() {
+      return this.user && this.user.profile_picture
+        ? process.env.VUE_APP_BACKEND_URL +
+            "storage/" +
+            this.user.profile_picture
+        : "https://www.colorbook.io/imagecreator.php?width=300&height=300&hex=&text=";
     },
   },
   created() {
