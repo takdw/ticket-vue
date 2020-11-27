@@ -65,6 +65,16 @@ export default {
     loading: false,
     searchQuery: "",
   }),
+  watch: {
+    searchQuery(newValue) {
+      this.$router.replace({
+        query: {
+          ...this.$route.query,
+          search: newValue,
+        },
+      });
+    },
+  },
   computed: {
     tickets() {
       return this.paginator.data;
