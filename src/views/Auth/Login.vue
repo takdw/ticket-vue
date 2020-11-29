@@ -34,6 +34,13 @@
             Incorrect email/password combination.
           </p>
         </div>
+        <div v-if="message" class="mt-4">
+          <p
+            class="text-red-800 bg-red-200 border border-red-800 text-center p-4 rounded-lg"
+          >
+            {{ message }}
+          </p>
+        </div>
         <form @submit.prevent="login" class="space-y-3 mt-4">
           <div>
             <label
@@ -85,10 +92,12 @@ export default {
     email: "",
     password: "",
     error: false,
+    message: "",
   }),
   methods: {
     login() {
       this.error = false;
+      this.message = "";
       this.loading = true;
 
       this.$store
@@ -105,8 +114,10 @@ export default {
         .catch(err => {
           if (err.response.data.email || err.response.data.tin) {
             this.error = true;
-          } else {
-            // show an error message or something
+          }
+
+          if (err.response.data.inactive) {
+            this.message = err.response.data.inactive;
           }
         })
         .finally(() => {
