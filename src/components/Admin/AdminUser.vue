@@ -114,14 +114,60 @@
         </button>
       </div>
     </div>
+    <div
+      @click="cancelDepositing"
+      v-if="depositModalOpen"
+      class="fixed inset-0 bg-black bg-opacity-25 z-50"
+    >
+      <div class="h-full grid place-items-center">
+        <div
+          @click.stop
+          class="bg-white rounded-xl w-full max-w-lg overflow-hidden"
+        >
+          <form @submit.prevent="deposit">
+            <h2 class="mt-8 px-8 font-medium text-xl">Deposit Money</h2>
+            <div class="mt-2 px-8">
+              <p class="text-gray-700">
+                You are depositing money to <strong>{{ user.name }}</strong
+                >.
+              </p>
+              <p class="text-gray-700">
+                Current Balance: <small>ETB</small>{{ " " }}
+                <strong>{{ balance }}</strong>
+              </p>
+            </div>
+            <div class="mt-4 px-8">
+              <label for="amount" class="font-medium">Amount to Depoist</label>
+              <input
+                v-model="amount"
+                id="amount"
+                class="form-input block w-full max-w-sm mt-1"
+                placeholder="1000"
+              />
+            </div>
+            <div class="mt-8 bg-gray-200 py-4 px-8 space-x-4">
+              <Button :loading="depositing">Deposit</Button>
+              <Button @click="cancelDepositing" variant="outline" type="button"
+                >Cancel</Button
+              >
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import { DateTime } from "luxon";
 
+import Button from "@/components/Button";
+
 export default {
   props: ["user"],
+  components: {
+    Button,
+  },
   data: () => ({
     dateObj: {},
     recentlyDeactivated: false,
@@ -129,6 +175,8 @@ export default {
     deactivating: false,
     depositing: false,
     activating: false,
+    depositModalOpen: false,
+    amount: "",
   }),
   created() {
     this.dateObj = DateTime.fromISO(this.user.created_at);
@@ -151,6 +199,9 @@ export default {
     isAdmin() {
       return this.user.roles_list.includes("admin");
     },
+    balance() {
+      return (parseInt(this.user.wallet_balance) / 100).toFixed(2);
+    },
   },
   methods: {
     deactivate() {
@@ -165,7 +216,13 @@ export default {
         .catch(err => console.log(err))
         .finally(() => (this.deactivating = false));
     },
-    startDepositing() {},
+    startDepositing() {
+      this.depositModalOpen = true;
+    },
+    cancelDepositing() {
+      this.amount = "";
+      this.depositModalOpen = false;
+    },
     activate() {
       this.activating = true;
 
@@ -177,6 +234,27 @@ export default {
         })
         .catch(err => console.log(err))
         .finally(() => (this.activating = false));
+    },
+    deposit() {
+      this.depositing = true;
+
+      let amount = parseInt(this.amount);
+
+      if (isNaN(amount)) {
+        this.depositing = false;
+        return;
+      }
+
+      this.$http
+        .post(`/users/${this.user.id}/deposit`, {
+          amount: amount * 100,
+        })
+        .then(() => {
+          this.$emit("deposited");
+          this.cancelDepositing();
+        })
+        .catch(err => console.log(err))
+        .finally(() => (this.depositing = false));
     },
   },
 };

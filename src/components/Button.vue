@@ -1,7 +1,7 @@
 <template>
   <button
     @click.stop="$emit('click', $event)"
-    class="relative mt-4 px-12 py-2 rounded-lg text-white border border-transparent font-bold transition duration-300 ease-in-out overflow-hidden"
+    class="relative px-12 py-2 rounded-lg text-white border border-transparent font-bold transition duration-300 ease-in-out overflow-hidden"
     :class="classes"
   >
     <span

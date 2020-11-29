@@ -63,13 +63,14 @@
             v-for="user in users"
             :key="`admin-user-${user.id}`"
             :user="user"
+            @deposited="refreshUser(user)"
           />
         </div>
       </div>
       <div v-if="hasPages" class="flex px-6 py-4">
         <pagination
           :data="paginator"
-          @pagination-change-page="getUsers"
+          @pagination-change-page="changePage"
           :limit="3"
         />
       </div>
@@ -94,6 +95,7 @@ export default {
     paginator: {
       data: [],
     },
+    currentPage: 1,
   }),
   created() {
     this.getUsers();
@@ -115,12 +117,16 @@ export default {
 
       this.getUsers();
     },
-    getUsers(page = 1) {
+    changePage(page = 1) {
+      this.currentPage = page;
+      this.getUsers();
+    },
+    getUsers() {
       this.loading = true;
 
       const params = [];
 
-      if (page !== 1) params.push(`page=${page}`);
+      if (this.currentPage !== 1) params.push(`page=${this.currentPage}`);
       if (this.statusFilter) params.push(`status=${this.statusFilter}`);
 
       this.$http
@@ -128,6 +134,9 @@ export default {
         .then(({ data }) => (this.paginator = data))
         .catch(err => console.log(err))
         .finally(() => (this.loading = false));
+    },
+    refreshUser(user) {
+      this.getUsers();
     },
   },
 };
