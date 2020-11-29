@@ -190,6 +190,17 @@ const routes = [
         },
       },
       {
+        path: "vendors/:id",
+        name: "Admin Vendors Detail",
+        component: () =>
+          import(
+            /* webpackChunkName: "admin-vendors-Detail" */ "../views/Admin/Vendor.vue"
+          ),
+        meta: {
+          requiresAdmin: true,
+        },
+      },
+      {
         path: "tickets",
         name: "Admin Tickets",
         component: () =>

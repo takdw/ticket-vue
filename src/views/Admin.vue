@@ -176,7 +176,8 @@ export default {
 </script>
 
 <style>
-.admin-nav .router-link-exact-active {
+.admin-nav .router-link-exact-active,
+.admin-nav .router-link-active {
   @apply bg-indigo-500 text-white hover:bg-indigo-400;
 }
 </style>

@@ -61,6 +61,12 @@ export default {
           } hover:bg-indigo-400 focus:border-indigo-700 active:bg-indigo-600 focus:shadow-outline-indigo ${
             this.loading ? "cursor-wait" : ""
           }`;
+        case "danger":
+          return `${this.bg} ${
+            this.text
+          } hover:bg-red-400 focus:border-red-700 active:bg-red-600 focus:shadow-outline-red ${
+            this.loading ? "cursor-wait" : ""
+          }`;
         case "outline":
           return `${this.bg} ${this.text} ${
             this.loading ? "border-gray-400" : "border-gray-500"

@@ -1,7 +1,11 @@
 <template>
   <div class="grid grid-cols-8">
     <div class="col-span-4 px-6 py-4 whitespace-nowrap">
-      <p class="font-medium text-gray-900">{{ vendor.name }}</p>
+      <router-link
+        :to="`/admin/vendors/${vendor.id}`"
+        class="font-medium text-gray-900"
+        >{{ vendor.name }}</router-link
+      >
       <p class="text-sm text-gray-600">{{ vendor.tin }}</p>
     </div>
     <div class="col-span-1 grid place-items-center px-6 py-4 whitespace-nowrap">
