@@ -155,6 +155,8 @@ export default {
   created() {
     this.tin = this.user.tin;
     this.name = this.user.name;
+    this.phone_number = this.user.phone_number;
+    this.email = this.user.email;
     this.existingLicense = this.user.license_path;
     this.existingLogo = this.user.logo_path;
     this.existingImage = this.user.image_path;
@@ -166,6 +168,8 @@ export default {
 
       const fd = new FormData();
       if (this.name) fd.append("name", this.name);
+      if (this.email) fd.append("email", this.email);
+      if (this.phone_number) fd.append("phone_number", this.phone_number);
       if (this.license.size) fd.append("license", this.license);
       if (this.logo.size) fd.append("logo", this.logo);
       if (this.image.size) fd.append("image", this.image);
@@ -176,7 +180,10 @@ export default {
             "Content-Type": "multipart/form-data",
           },
         })
-        .then(response => console.log(response.data))
+        .then(response => {
+          this.$store.commit("setUser", response.data);
+          this.$router.push("/vendor");
+        })
         .catch(err => console.log(err))
         .finally(() => (this.upadting = false));
     },
