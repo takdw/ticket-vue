@@ -40,11 +40,12 @@
             </button>
           </div>
           <div class="mt-2">
-            <button
-              class="w-full px-6 py-2 text-indigo-200 border border-indigo-300 hover:text-white hover:border-white rounded-full hover:text-white focus:outline-none transition duration-300 ease-in-out"
+            <router-link
+              to="/profile/edit"
+              class="w-full block px-6 py-2 text-indigo-200 border border-indigo-300 hover:text-white hover:border-white rounded-full hover:text-white focus:outline-none transition duration-300 ease-in-out"
             >
               Edit Profile
-            </button>
+            </router-link>
           </div>
         </div>
       </div>
