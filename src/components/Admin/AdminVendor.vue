@@ -74,7 +74,7 @@
           v-if="!verified"
           @click="verify"
           type="button"
-          class="relative ml-2 px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-200 transition ease-in-out duration-300 overflow-hidden"
+          class="relative px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-200 transition ease-in-out duration-300 overflow-hidden"
           :class="{
             'bg-gray-200 text-gray-900 cursor-wait': verifying,
           }"
@@ -92,10 +92,31 @@
           <span>Verify</span>
         </button>
         <button
+          v-else
+          @click="unverify"
+          type="button"
+          class="relative px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-200 transition ease-in-out duration-300 overflow-hidden"
+          :class="{
+            'bg-gray-200 text-gray-900 cursor-wait': unverifying,
+          }"
+          :disabled="unverifying"
+        >
+          <span
+            v-show="unverifying"
+            class="absolute inset-0 inline-flex items-center justify-center bg-gray-200"
+          >
+            <span
+              class="block h-4 w-4 border-2 rounded-full spin border-gray-800"
+              style="border-bottom-color: transparent"
+            ></span>
+          </span>
+          <span>Unverify</span>
+        </button>
+        <button
           v-if="canDeactivate"
           @click="deactivate"
           type="button"
-          class="relative ml-2 px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-200 transition ease-in-out duration-300 overflow-hidden"
+          class="relative px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-200 transition ease-in-out duration-300 overflow-hidden"
           :class="{
             'bg-gray-200 text-gray-900 cursor-wait': deactivating,
           }"
@@ -116,7 +137,7 @@
           v-else
           @click="activate"
           type="button"
-          class="relative ml-2 px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-200 transition ease-in-out duration-300 overflow-hidden"
+          class="relative px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-200 transition ease-in-out duration-300 overflow-hidden"
           :class="{
             'bg-gray-200 text-gray-900 cursor-wait': activating,
           }"
@@ -148,6 +169,7 @@ export default {
     recentlyDeactivated: false,
     recentlyActivated: false,
     recentlyVerified: false,
+    recentlyUnverified: false,
     deactivating: false,
     activating: false,
     verifying: false,
@@ -157,7 +179,10 @@ export default {
   },
   computed: {
     verified() {
-      return this.vendor.verified_at || this.recentlyVerified;
+      return (
+        (this.vendor.verified_at || this.recentlyVerified) &&
+        !this.recentlyUnverified
+      );
     },
     verifiedAt() {
       return this.verified
@@ -209,9 +234,24 @@ export default {
 
       this.$http
         .post(`/vendors/${this.vendor.id}/verify`)
-        .then(() => (this.recentlyVerified = true))
+        .then(() => {
+          this.recentlyVerified = true;
+          this.recentlyUnverified = false;
+        })
         .catch(err => console.log(err))
         .finally(() => (this.verifying = false));
+    },
+    unverify() {
+      this.unverifying = true;
+
+      this.$http
+        .delete(`/vendors/${this.vendor.id}/verify`)
+        .then(() => {
+          this.recentlyVerified = false;
+          this.recentlyUnverified = true;
+        })
+        .catch(err => console.log(err))
+        .finally(() => (this.unverifying = false));
     },
   },
 };
