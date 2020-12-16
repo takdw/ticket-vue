@@ -30,71 +30,92 @@
           Register as a Vendor
         </h2>
         <form @submit.prevent="create" class="mt-4 space-y-3 col-span-3">
+          <p class="text-sm text-gray-600"><em>* Required field</em></p>
           <div>
             <label
               class="block font-semibold text-sm uppercase text-gray-600"
               for="tin"
-              >TIN</label
+              >TIN *</label
             >
             <input
               v-model="tin"
               class="form-input w-full mt-1"
               id="tin"
-              placeholder=""
+              placeholder="0011223344"
             />
+            <p class="text-red-500 text-sm font-medium" v-if="errors.tin">
+              {{ errors.tin[0] }}
+            </p>
           </div>
           <div>
             <label
               class="block font-semibold text-sm uppercase text-gray-600"
               for="name"
-              >Name</label
+              >Name *</label
             >
             <input
               id="name"
               class="form-input w-full mt-1"
-              placeholder=""
+              placeholder="Famous Organizer"
               v-model="name"
             />
+            <p class="text-red-500 text-sm font-medium" v-if="errors.name">
+              {{ errors.name[0] }}
+            </p>
           </div>
           <div>
             <label
               class="block font-semibold text-sm uppercase text-gray-600"
               for="email"
-              >Email</label
+              >Email *</label
             >
             <input
               id="email"
               class="form-input w-full mt-1"
-              placeholder=""
+              :class="{ 'border-red-500': errors.email }"
+              placeholder="vendor@provider.com"
               v-model="email"
             />
+            <p class="text-red-500 text-sm font-medium" v-if="errors.email">
+              {{ errors.email[0] }}
+            </p>
           </div>
           <div>
             <label
               class="block font-semibold text-sm uppercase text-gray-600"
               for="phone_number"
-              >Phone Number</label
+              >Phone Number *</label
             >
             <input
               id="phone_number"
               class="form-input w-full mt-1"
-              placeholder=""
+              placeholder="0911223344"
+              :class="{ 'border-red-500': errors.phone_number }"
               v-model="phone_number"
             />
+            <p
+              class="text-red-500 text-sm font-medium"
+              v-if="errors.phone_number"
+            >
+              {{ errors.phone_number[0] }}
+            </p>
           </div>
           <div>
             <label
               class="block font-semibold text-sm uppercase text-gray-600"
               for="password"
-              >Password</label
+              >Password *</label
             >
             <input
               id="password"
               class="form-input w-full mt-1"
-              placeholder=""
+              placeholder="Password"
               type="password"
               v-model="password"
             />
+            <p class="text-red-500 text-sm font-medium" v-if="errors.password">
+              {{ errors.password[0] }}
+            </p>
           </div>
           <div>
             <label
@@ -105,7 +126,7 @@
             <input
               id="password_confirmation"
               class="form-input w-full mt-1"
-              placeholder=""
+              placeholder="Confrim Password"
               type="password"
               v-model="password_confirmation"
             />
@@ -203,6 +224,7 @@ export default {
     license: {},
     logo: {},
     image: {},
+    errors: [],
   }),
   created() {},
   computed: {},
@@ -228,7 +250,11 @@ export default {
           },
         })
         .then(response => this.$router.push("/login"))
-        .catch(err => console.log(err))
+        .catch(err => {
+          if (err.response.data) {
+            this.errors = err.response.data.errors;
+          }
+        })
         .finally(() => (this.creating = false));
     },
   },

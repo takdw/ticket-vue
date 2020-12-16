@@ -22,9 +22,13 @@
               <input
                 v-model="title"
                 class="form-input w-full mt-1"
+                :class="{ 'border-red-500': errors.title }"
                 id="title"
-                placeholder=""
+                placeholder="A Cool Event"
               />
+              <p class="text-red-500 text-sm font-medium" v-if="errors.title">
+                {{ errors.title[0] }}
+              </p>
             </div>
             <div>
               <label
@@ -35,9 +39,16 @@
               <input
                 id="subtitle"
                 class="form-input w-full mt-1"
-                placeholder=""
+                :class="{ 'border-red-500': errors.subtitle }"
+                placeholder="Let's celebrate the event together"
                 v-model="subtitle"
               />
+              <p
+                class="text-red-500 text-sm font-medium"
+                v-if="errors.subtitle"
+              >
+                {{ errors.subtitle[0] }}
+              </p>
             </div>
             <div class="flex space-x-6">
               <div class="flex-1">
@@ -49,9 +60,14 @@
                 <input
                   class="form-input w-full mt-1"
                   id="date"
+                  :class="{ 'border-red-500': errors.date }"
                   placeholder="DD-MM-YYYY"
                   v-model="date"
                 />
+
+                <p class="text-red-500 text-sm font-medium" v-if="errors.date">
+                  {{ errors.date[0] }}
+                </p>
               </div>
               <div class="flex-1">
                 <label
@@ -61,10 +77,14 @@
                 >
                 <input
                   class="form-input w-full mt-1"
+                  :class="{ 'border-red-500': errors.time }"
                   id="time"
                   placeholder="HH:MM AA"
                   v-model="time"
                 />
+                <p class="text-red-500 text-sm font-medium" v-if="errors.time">
+                  {{ errors.time[0] }}
+                </p>
               </div>
             </div>
             <div class="flex space-x-6">
@@ -76,10 +96,15 @@
                 >
                 <input
                   class="form-input w-full mt-1"
+                  :class="{ 'border-red-500': errors.venue }"
                   id="venue"
-                  placeholder=""
+                  placeholder="Ghion Hotel"
                   v-model="venue"
                 />
+
+                <p class="text-red-500 text-sm font-medium" v-if="errors.venue">
+                  {{ errors.venue[0] }}
+                </p>
               </div>
               <div class="flex-1">
                 <label
@@ -89,10 +114,14 @@
                 >
                 <input
                   class="form-input w-full mt-1"
+                  :class="{ 'border-red-500': errors.city }"
                   id="city"
-                  placeholder=""
+                  placeholder="Addis Ababa"
                   v-model="city"
                 />
+                <p class="text-red-500 text-sm font-medium" v-if="errors.city">
+                  {{ errors.city[0] }}
+                </p>
               </div>
             </div>
             <div>
@@ -103,10 +132,14 @@
               >
               <input
                 class="form-input w-full mt-1"
+                :class="{ 'border-red-500': errors.price }"
                 id="price"
-                placeholder=""
+                placeholder="130"
                 v-model="price"
               />
+              <p class="text-red-500 text-sm font-medium" v-if="errors.price">
+                {{ errors.price[0] }}
+              </p>
             </div>
             <div>
               <label
@@ -133,6 +166,9 @@
                 :data="{ id: 'license', existing: '' }"
                 v-model="poster"
               />
+              <p class="text-red-500 text-sm font-medium" v-if="errors.poster">
+                {{ errors.poster[0] }}
+              </p>
             </div>
             <div class="text-center">
               <Button :loading="loading">Save</Button>
@@ -178,23 +214,32 @@ export default {
   },
   data: () => ({
     loading: false,
-    title: "Bira Biro",
-    subtitle: "An event to celebrate EDM",
-    date: "28-11-2020",
-    time: "7:00 PM",
-    venue: "Ghion Hotel",
-    city: "Addis Ababa",
-    price: 30000,
-    additional_info: "Gates open at 12:30PM",
+    title: "",
+    subtitle: "",
+    date: "",
+    time: "",
+    venue: "",
+    city: "",
+    price: "",
+    additional_info: "",
     poster: "",
+    errors: {},
   }),
   computed: {},
-  methods: {
-    publish() {
-      this.create(true);
+  watch: {
+    title(newVal) {
+      if (newVal) {
+        delete this.errors.title;
+      }
     },
-    create(publishNow = false) {
+  },
+  methods: {
+    publish(e) {
+      this.create(e, true);
+    },
+    create(e, publishNow = false) {
       this.loading = true;
+      this.errors = {};
 
       const date = DateTime.fromFormat(
         `${this.date} ${this.time}`,
@@ -210,7 +255,7 @@ export default {
       fd.append("price", this.price);
       fd.append("additional_info", this.additional_info);
       fd.append("poster", this.poster);
-      fd.append("publish", publishNow);
+      fd.append("publishNow", publishNow);
 
       this.$http
         .post(`/vendors/${this.user.id}/tickets`, fd, {
@@ -221,7 +266,11 @@ export default {
         .then(response => {
           this.$router.push("/vendor/tickets");
         })
-        .catch(err => console.log(err))
+        .catch(err => {
+          if (err.response.data) {
+            this.errors = err.response.data.errors;
+          }
+        })
         .finally(() => (this.loading = false));
     },
   },

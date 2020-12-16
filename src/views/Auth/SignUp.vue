@@ -28,6 +28,7 @@
       <div class="w-full max-w-md mx-auto py-12">
         <h2 class="text-3xl text-center font-bold">Create Account</h2>
         <form @submit.prevent="signup" class="space-y-3 mt-8">
+          <p class="text-sm text-gray-600"><em>* Required field</em></p>
           <div>
             <label
               class="block font-semibold text-sm uppercase text-gray-600"
@@ -49,7 +50,7 @@
             <label
               class="block font-semibold text-sm uppercase text-gray-600"
               for="email"
-              >Email</label
+              >Email *</label
             >
             <input
               v-model="email"
@@ -97,7 +98,7 @@
               id="country"
             >
               <option>Choose a country...</option>
-              <option value="Ethiopia">Ethiopia</option>
+              <option value="Ethiopia" selected>Ethiopia</option>
             </select>
 
             <p class="text-red-500 text-sm font-medium" v-if="errors.country">
@@ -108,7 +109,7 @@
             <label
               class="block font-semibold text-sm uppercase text-gray-600"
               for="password"
-              >Password</label
+              >Password *</label
             >
             <input
               v-model="password"
@@ -128,7 +129,7 @@
               class="block font-semibold text-sm uppercase text-gray-600"
               for="password_confirmation"
             >
-              Confirm Password
+              Confirm Password *
             </label>
             <input
               v-model="password_confirmation"
