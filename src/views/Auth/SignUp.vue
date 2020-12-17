@@ -98,7 +98,9 @@
               id="country"
             >
               <option>Choose a country...</option>
-              <option value="Ethiopia" selected>Ethiopia</option>
+              <option value="Ethiopia" :selected="country === 'Ethiopia'">
+                Ethiopia
+              </option>
             </select>
 
             <p class="text-red-500 text-sm font-medium" v-if="errors.country">
@@ -195,7 +197,7 @@ export default {
     name: "",
     email: "",
     phone_number: "",
-    country: "",
+    country: "Ethiopia",
     password: "",
     password_confirmation: "",
     profile_picture: "",
@@ -231,7 +233,9 @@ export default {
         })
         .then(() => this.$router.push("/login"))
         .catch(err => {
-          this.errors = err.response.data.errors;
+          this.errors = err.response.data.errors
+            ? err.response.data.errors
+            : {};
         })
         .finally(() => (this.working = false));
     },
